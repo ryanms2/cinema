@@ -1,12 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { CardHeader, CardFooter, Card } from "@/components/ui/card"
+import { CardHeader, Card } from "@/components/ui/card"
 import axios from 'axios';
 import { useEffect, useState } from "react";
 
-export function NowPlaying() {
+export function Trailers() {
   const [tipo, setTipo] = useState('streaming');
   const [movies, setMovies] = useState([]); 
 
@@ -76,7 +75,7 @@ export function NowPlaying() {
           </div>
         </div>
       </div>
-      <div className="flex overflow-x-auto w-full max-w-2xl mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8">
+      <div className="flex overflow-x-auto w-full max-w-2xl mt-4 space-x-4 md:space-x-6 lg:max-w-none lg:overflow-visible lg:space-x-8">
         {movies.map((movie: any, index: number) => (
             <Card className="w-[140px]" key={index}>
             <img
@@ -91,17 +90,57 @@ export function NowPlaying() {
               width="140"
             />
             <CardHeader>
-              <Badge className="relative" variant="secondary">
-              {movie.vote_average} <span className="absolute right-0 top-0  text-black rounded-full p-1">★</span>
-              </Badge>
+                <div>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => {
+                    const modal = document.createElement("div");
+                    modal.style.position = "fixed";
+                    modal.style.top = "0";
+                    modal.style.left = "0";
+                    modal.style.width = "100%";
+                    modal.style.height = "100%";
+                    modal.style.backgroundColor = "rgba(0,0,0,0.5)";
+                    modal.style.display = "flex";
+                    modal.style.justifyContent = "center";
+                    modal.style.alignItems = "center";
+                    modal.style.zIndex = "1000";
+
+                    const videoPlayer = document.createElement("video");
+                    videoPlayer.src = `https://www.youtube.com/${movie.video_path}`;
+                    videoPlayer.controls = true;
+                    videoPlayer.autoplay = true;
+                    videoPlayer.style.maxWidth = "80%";
+                    videoPlayer.style.maxHeight = "80%";
+
+                    const closeButton = document.createElement("button");
+                    closeButton.innerText = "Fechar";
+                    closeButton.style.position = "absolute";
+                    closeButton.style.top = "20px";
+                    closeButton.style.right = "20px";
+                    closeButton.style.zIndex = "1001";
+                    closeButton.style.padding = "10px";
+                    closeButton.style.borderRadius = "5px";
+                    closeButton.style.border = "none";
+                    closeButton.style.backgroundColor = "#ff0000";
+                    closeButton.style.color = "white";
+                    closeButton.onclick = function() {
+                      document.body.removeChild(modal);
+                    };
+
+                    modal.appendChild(videoPlayer);
+                    modal.appendChild(closeButton);
+                    document.body.appendChild(modal);
+                  }}
+                >
+                  Assistir Trailer
+                </button>
+                </div>
               <div className="flex justify-between items-center mt-2">
                 <h5 className="text-sm font-bold">{movie.title}</h5>
                 <MoreVerticalIcon className="text-gray-500" />
               </div>
             </CardHeader>
-            <CardFooter className="text-xs">
-              <p>{movie.release_date}</p>
-            </CardFooter>
           </Card>
         ))}
         
