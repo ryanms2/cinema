@@ -1,28 +1,21 @@
-import axios from 'axios';
+"use client"
+import Link from "next/link";
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useState } from "react";
 
-export default function Welcome() {
-
-    const fetchMovies = async (tipo: any) => {
-  
-          const options = {
-              method: 'GET',
-              url: url,
-              headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN
-              }
-          };
-  
-          try {
-              const response = await axios.request(options);
-              return response.data;
-          } catch (error) {
-              console.error(error);
-          }
-      };
-
+export function Welcome() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState<string | null>(null)
+  const createPageURL = (term: string | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (term) {
+        params.set('query', term);
+      }
+      return `search${pathname}?${params.toString()}`;
+    }
     return (
-      <div className="bg-[#1F2937] text-white">
+      <div className="bg-[#1F2937] text-white mt-0.5">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-4xl font-bold">Bem-vindo(a).</h1>
           <p className="text-xl my-2">Milhões de filmes, séries e pessoas para descobrires. Explora já.</p>
@@ -30,11 +23,11 @@ export default function Welcome() {
             <input
               className="flex-grow p-2 rounded-l-lg focus:outline-none"
               placeholder="Pesquisar por um filme, uma série televisiva, uma pessoa..."
-              type="text"
+              type="text" onChange={(e) => setSearch(e.target.value)}
             />
-            <button className="bg-[rgb(37,99,235)] text-white p-2 rounded-r-lg hover:bg-[#2563EB] transition-colors">
+            <Link href={createPageURL(search)}><button className="bg-[rgb(37,99,235)] text-white p-2 rounded-r-lg hover:bg-[#2563EB] transition-colors">
               Search
-            </button>
+            </button></Link>
           </div>
         </div>
         <div className="bg-[#2E4055] py-4">

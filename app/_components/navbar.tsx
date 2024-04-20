@@ -10,10 +10,13 @@ export function Navbar() {
     <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
       <div className="flex space-x-4">
         <button className="text-white bg-slate-600">Logo</button>
-        <div onMouseEnter={() => setShowDropdown({ ...showDropdown, movies: true })} >
-          Filmes
+        <div onMouseEnter={() => setShowDropdown({ ...showDropdown, movies: true })} onMouseLeave={() => setShowDropdown({ ...showDropdown, movies: false })}>
+          <button>
+            Filmes
+          </button>
+          
           {showDropdown.movies && (
-            <div className="absolute mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20" onMouseLeave={() => setShowDropdown({ ...showDropdown, movies: false }) }>
+            <div className="absolute py-2 w-48 bg-white rounded-md shadow-xl z-20" >
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Populares</Link>
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Em Exibição</Link>
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Brevemente</Link>
@@ -21,10 +24,13 @@ export function Navbar() {
             </div>
           )}
         </div>
-        <div onMouseEnter={() => setShowDropdown({ ...showDropdown, series: true })} >
-          Séries
+        <div onMouseEnter={() => setShowDropdown({ ...showDropdown, series: true })} onMouseLeave={() => setShowDropdown({ ...showDropdown, series: false })}>
+          <button>
+             Séries
+          </button>
+          
           {showDropdown.series && (
-            <div className="absolute mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20" onMouseLeave={() => setShowDropdown({ ...showDropdown, series: false })}>
+            <div className="absolute py-2 w-48 bg-white rounded-md shadow-xl z-20" >
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Populares</Link>
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Em Exibição</Link>
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Brevemente</Link>
@@ -32,10 +38,12 @@ export function Navbar() {
             </div>
           )}
         </div>
-        <div onMouseEnter={() => setShowDropdown({ ...showDropdown, artists: true })} >
-          Artistas
+        <div onMouseEnter={() => setShowDropdown({ ...showDropdown, artists: true })} onMouseLeave={() => setShowDropdown({ ...showDropdown, artists: false })}>
+          <button >
+            Artistas
+          </button>
           {showDropdown.artists && (
-            <div className="absolute mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20" onMouseLeave={() => setShowDropdown({ ...showDropdown, artists: false })}>
+            <div className="absolute py-2 w-48 bg-white rounded-md shadow-xl z-20" >
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Populares</Link>
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Em Exibição</Link>
               <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Brevemente</Link>

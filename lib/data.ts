@@ -18,6 +18,24 @@ export async function fetchAll(query: string) {
     }
 }
 
+export async function fetchAllResult(page:number, item: string, query: string) {
+  const url = `https://api.themoviedb.org/3/search/${item}?api_key=${process.env.NEXT_PUBLIC_TOKEN}&query=${query}&include_adult=false&language=pt-br&page=${page}`;
+  const options = {
+      method: 'GET',
+      url: url,
+      headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN
+      }
+  };
+  try {
+      const response = await axios.request(options);
+      return response.data;
+  } catch (error) {
+      console.error(error);
+  }
+}
+
 export async function fetchMovieAmount(query: string) {
     const url = `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=pt-br`
     
