@@ -1,102 +1,106 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/tNMugjxSqQf
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
+/* eslint-disable @next/next/no-img-element */
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
-
-    <div className="max-w-2xl mx-auto my-6">
-      <Select>
-        <SelectTrigger id="ordering">
-          <SelectValue placeholder="Ordenar" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="alphabetical">Alfabética</SelectItem>
-          <SelectItem value="popularity">Popularidade</SelectItem>
-          <SelectItem value="release-date">Data de lançamento</SelectItem>
-        </SelectContent>
-      </Select>
-      <div className="my-6">
-        <h3 className="mb-2 font-bold">Onde Ver</h3>
-        <ScrollArea className="border rounded-md h-32">
-          <div className="grid grid-cols-3 gap-4 p-4">
-            <img
-              alt="Streaming Service Logo"
-              height="40"
-              src="/placeholder.svg"
-              style={{
-                aspectRatio: "40/40",
-                objectFit: "cover",
-              }}
-              width="40"
-            />
-          </div>
-        </ScrollArea>
-      </div>
-      <details className="my-6">
-        <summary className="mb-2 font-bold cursor-pointer">Filtros</summary>
-        <div className="grid gap-6">
-          <div>
-            <h4 className="mb-2 font-semibold">Título:</h4>
-            <Input placeholder="Filme ou série" />
-          </div>
-          <div className="grid gap-4">
-            <h4 className="mb-2 font-semibold">Ano de Lançamento:</h4>
-            <div className="flex gap-4">
-              <Input className="flex-1" placeholder="De" />
-              <Input className="flex-1" placeholder="Até" />
-            </div>
-          </div>
-          <div>
-            <h4 className="mb-2 font-semibold">Gêneros:</h4>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">Ação</Badge>
-              <Badge variant="secondary">Aventura</Badge>
-              <Badge variant="secondary">Comédia</Badge>
-              <Badge variant="secondary">Drama</Badge>
-              <Badge variant="secondary">Fantasia</Badge>
-              <Badge variant="secondary">Ficção Científica</Badge>
-              <Badge variant="secondary">Romance</Badge>
-              <Badge variant="secondary">Terror</Badge>
-            </div>
-          </div>
-          <div>
-            <h4 className="mb-2 font-semibold">Classificação Etária:</h4>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">L</Badge>
-              <Badge variant="secondary">10</Badge>
-              <Badge variant="secondary">12</Badge>
-              <Badge variant="secondary">14</Badge>
-              <Badge variant="secondary">16</Badge>
-              <Badge variant="secondary">18</Badge>
-            </div>
-          </div>
-          <div>
-            <h4 className="mb-2 font-semibold">Duração:</h4>
-            <Select>
-              <SelectTrigger id="duration">
-                <SelectValue placeholder="Selecione uma opção" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="short">Curta (até 1h30min)</SelectItem>
-                <SelectItem value="medium">Média (1h30min a 2h30min)</SelectItem>
-                <SelectItem value="long">Longa (mais de 2h30min)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <h4 className="mb-2 font-semibold">Avaliação dos Usuários:</h4>
-            <div className="flex items-center gap-4">
-              <Input className="flex-1" type="range" />
-              <span className="ml-4 text-sm">4/5</span>
-            </div>
+export default function Test() {
+  return (
+    <div className="max-w-7xl mx-auto ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="group relative">
+          <img
+            alt="Movie Poster"
+            className="w-full h-auto rounded-lg shadow-lg"
+            height="300"
+            src="/placeholder.svg"
+            style={{
+              aspectRatio: "200/300",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent rounded-b-lg">
+            <Badge className="absolute top-4 left-4">75%</Badge>
+            <h3 className="text-white font-semibold">Patos!</h3>
+            <span className="text-white text-sm">04 de janeiro de 2024</span>
           </div>
         </div>
-      </details>
-      <Button className="w-full">Pesquisar</Button>
+        <div className="group relative">
+          <img
+            alt="Movie Poster"
+            className="w-full h-auto rounded-lg shadow-lg"
+            height="300"
+            src="/placeholder.svg"
+            style={{
+              aspectRatio: "200/300",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent rounded-b-lg">
+            <Badge className="absolute top-4 left-4">85%</Badge>
+            <h3 className="text-white font-semibold">Filme 2</h3>
+            <span className="text-white text-sm">10 de fevereiro de 2024</span>
+          </div>
+        </div>
+        <div className="group relative">
+          <img
+            alt="Movie Poster"
+            className="w-full h-auto rounded-lg shadow-lg"
+            height="300"
+            src="/placeholder.svg"
+            style={{
+              aspectRatio: "200/300",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent rounded-b-lg">
+            <Badge className="absolute top-4 left-4">92%</Badge>
+            <h3 className="text-white font-semibold">Filme 3</h3>
+            <span className="text-white text-sm">22 de março de 2024</span>
+          </div>
+        </div>
+        <div className="group relative">
+          <img
+            alt="Movie Poster"
+            className="w-full h-auto rounded-lg shadow-lg"
+            height="300"
+            src="/placeholder.svg"
+            style={{
+              aspectRatio: "200/300",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent rounded-b-lg">
+            <Badge className="absolute top-4 left-4">68%</Badge>
+            <h3 className="text-white font-semibold">Filme 4</h3>
+            <span className="text-white text-sm">05 de abril de 2024</span>
+          </div>
+        </div>
+        <div className="group relative">
+          <img
+            alt="Movie Poster"
+            className="w-full h-auto rounded-lg shadow-lg"
+            height="300"
+            src="/placeholder.svg"
+            style={{
+              aspectRatio: "200/300",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent rounded-b-lg">
+            <Badge className="absolute top-4 left-4">79%</Badge>
+            <h3 className="text-white font-semibold">Filme 5</h3>
+            <span className="text-white text-sm">18 de maio de 2024</span>
+          </div>
+        </div>
+      </div>
+      <div className="text-center mt-6">
+        <Button variant="secondary">Ver Mais</Button>
+      </div>
     </div>
+  )
+}

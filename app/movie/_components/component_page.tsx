@@ -3,13 +3,14 @@
 "use client"
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { fetchAll, fetchAllResult, fetchCollectionsAmount, fetchMovieAmount, fetchPersonAmount, fetchSeriesAmount } from "@/lib/data";
+import { fetchAll, fetchAllResult, fetchCollectionsAmount, fetchMovieAmount, fetchPersonAmount, fetchPopularMovies, fetchSeriesAmount } from "@/lib/data";
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
+import Test from "./test";
 
 export default function ComponentPage({searchParams,
 }: {
@@ -50,31 +51,23 @@ export default function ComponentPage({searchParams,
     
     useEffect(() => {
         const fetchData = async () => {
-            let total = await fetchAll(query); 
+            let total = await fetchPopularMovies(); 
             
-            if(selectedItem) {
+            /*if(selectedItem) {
                 total = await fetchAllResult(currentPage, selectedItem, query);   
-            }
-            
-            const movies = await fetchMovieAmount(query);
-            const series = await fetchSeriesAmount(query);
-            const collections = await fetchCollectionsAmount(query);
-            const persons = await fetchPersonAmount(query);
+            } */
+            console.log(total)
             setPage(total.total_pages)
             setTotalPages(total);
-            setAmountMovies(movies);
-            setAmountSeries(series);
-            setAmountCollections(collections);
-            setAmountPerson(persons);
         };
         fetchData();
-    }, [query, selectedItem, currentPage]);
+    }, [query, currentPage]);
     
     
 return (
     <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto p-4">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="flex gap-4">
             <div>
             <div className="sticky top-4 bg-white p-4 rounded-lg shadow">
                 <div className="max-w-2xl mx-auto my-6">
@@ -169,35 +162,12 @@ return (
                 </div>
             </div>
             </div>
-            <div className="col-span-3">
-                {totalPages?.results?.map((result: any, index: number) => (
-                  <Card key={index} className="mb-4">
-                <div className="flex gap-4">
-                <img
-                    alt={result.title || result.original_title || result.name || result.original_name}
-                    className="w-24 h-32 object-cover rounded"
-                    height="120"
-                    src={`https://image.tmdb.org/t/p/w500${result.poster_path || result.profile_path}`}
-                    style={{
-                    aspectRatio: "90/120",
-                    objectFit: "cover",
-                    }}
-                    width="90"
-                />
-                <div>
-                    <h3 className="text-xl font-bold">{result.title || result.original_title || result.name || result.original_name }</h3>
-                    <p className="text-gray-700">
-                    {result.overview || result.known_for_department ? (result.overview ? result.overview.substring(0, 220) + '...' : '') : ''}
-                    </p>
-                    <p className="text-sm text-gray-500">{result.release_date}</p>
-                </div>
-                </div>
-            </Card>  
-                ))}
-                
-            </div>
+            <Test />
         </div>
+        
         </div>
+        
     </div>
+    
     )
 }

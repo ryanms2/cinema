@@ -116,3 +116,23 @@ export async function fetchPersonAmount(query: string) {
         console.error(error);
       }
 }
+
+export async function fetchPopularMovies() {
+  const url = `https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1`
+    
+    const options = {
+        method: 'GET',
+        url: url,
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+        }
+      };
+      
+      try {
+        const response = await axios.request(options);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+      }
+}
