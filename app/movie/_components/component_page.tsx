@@ -2,75 +2,43 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { fetchAll, fetchAllResult, fetchCollectionsAmount, fetchMovieAmount, fetchPersonAmount, fetchPopularMovies, fetchSeriesAmount } from "@/lib/data";
+import {  fetchPopularMovies } from "@/lib/data";
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
-import Test from "./test";
+import { ListFilms } from "./list-films";
 
-export default function ComponentPage({searchParams,
-}: {
-    searchParams?: {
-        query?: string;
-        page?: string;
-        category?: string;
-    }
-}) {
-
-    const [selectedItem, setSelectedItem] = useState<string | null>(searchParams?.category || "multi")
-    const [totalPages, setTotalPages] = useState<any>()
-    const [amountMovies, setAmountMovies] = useState<number>(0)
-    const [amountSeries, setAmountSeries] = useState<number>(0)
-    const [amountCollections, setAmountCollections] = useState<number>(0)
-    const [amountPerson, setAmountPerson] = useState<number>(0)
-    const [page, setPage] = useState<number>(1)
-
-    const query = searchParams?.query || '';
-    let currentPage = Number(searchParams?.page) || 1;
-
-    const searchParamss = useSearchParams();
-    const pathname = usePathname();
-    const { replace } = useRouter();
-    const handleCategory = (category: string | null) => {
-        if(category !== "multi") {
-          const params = new URLSearchParams(searchParamss);
-          params.set('page', '1');
-          if (category) {
-            params.set('category', category);
-          } else {
-            params.delete('category');
-          }
-          replace(`${pathname}?${params.toString()}`);  
-          setSelectedItem(category)
-        }
-    };
+export default function ComponentPage() {
+    const [searchMovie, setSearchMovie] = useState<string | null>(null)
+    const [inputSearch, setInputSearch] = useState<string | null>(null)
     
-    useEffect(() => {
-        const fetchData = async () => {
-            let total = await fetchPopularMovies(); 
-            
-            /*if(selectedItem) {
-                total = await fetchAllResult(currentPage, selectedItem, query);   
-            } */
-            console.log(total)
-            setPage(total.total_pages)
-            setTotalPages(total);
+    const [movies, setMovies] = useState<any>();
+
+    /*useEffect(() => {
+        const fetchMovies = async () => {
+            if (searchMovie) {
+                const fetchedMovies = await fetchPopularMovies(searchMovie);
+                setMovies(fetchedMovies);
+            }
         };
-        fetchData();
-    }, [query, currentPage]);
-    
+        fetchMovies();
+    }, [searchMovie]); */
+
+    const handleSearch = () => {
+        
+        setSearchMovie(inputSearch);
+        
+    };
     
 return (
     <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto p-4">
-        <div className="flex gap-4">
-            <div>
-            <div className="sticky top-4 bg-white p-4 rounded-lg shadow">
-                <div className="max-w-2xl mx-auto my-6">
+        <div className="flex flex-col md:flex-row gap-4">
+            
+            <div className="order-1 md:order-1 md:sticky top-4 bg-white p-4 rounded-lg  max-w-full md:max-w-xs border-0">
+                <div className="max-w-2xl h-50px mx-auto my-6">
                     <Select>
                     <SelectTrigger id="ordering">
                         <SelectValue placeholder="Ordenar" />
@@ -103,7 +71,7 @@ return (
                     <div className="grid gap-6">
                         <div>
                         <h4 className="mb-2 font-semibold">Título:</h4>
-                        <Input placeholder="Filme ou série" />
+                        <Input placeholder="Filme..." onChange={(e) => (setInputSearch(`query=${e.target.value}?`))} />
                         </div>
                         <div className="grid gap-4">
                         <h4 className="mb-2 font-semibold">Ano de Lançamento:</h4>
@@ -158,11 +126,12 @@ return (
                         </div>
                     </div>
                     </details>
-                    <Button className="w-full">Pesquisar</Button>
+                    <Button className="w-full" onClick={handleSearch}>Pesquisar</Button>
                 </div>
             </div>
+            <div className="order-2 md:order-2 flex-1">
+                <ListFilms inputSearch={searchMovie}/>
             </div>
-            <Test />
         </div>
         
         </div>

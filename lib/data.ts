@@ -117,8 +117,12 @@ export async function fetchPersonAmount(query: string) {
       }
 }
 
-export async function fetchPopularMovies() {
-  const url = `https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1`
+export async function fetchPopularMovies(query?: string | null) {
+  let url = `https://api.themoviedb.org/3/movie/popular?${query}language=pt-br&page=1`
+  if(!query) {
+    url = `https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1`
+  }
+  console.log(url)
     
     const options = {
         method: 'GET',
@@ -131,8 +135,27 @@ export async function fetchPopularMovies() {
       
       try {
         const response = await axios.request(options);
+        console.log(response.data)
         return response.data;
       } catch (error) {
         console.error(error);
       }
+}
+
+export async function fetchMoviesFilter(page:number, primaryYear: string, query: string, year: string) {
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_TOKEN}&query=${query}&include_adult=false&language=pt-br&primary_release_year=${primaryYear}&page=${page}&year=${year}`;
+  const options = {
+      method: 'GET',
+      url: url,
+      headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN
+      }
+  };
+  try {
+      const response = await axios.request(options);
+      return response.data;
+  } catch (error) {
+      console.error(error);
+  }
 }
