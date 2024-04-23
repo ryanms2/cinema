@@ -2,27 +2,33 @@
 "use client"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { fetchPopularMovies } from "@/lib/data";
+import { fetchMoviesFilter } from "@/lib/data";
 import { useEffect, useState } from "react";
 
-export function ListFilms({inputSearch}: {inputSearch: string | null}) {
+export function ListFilms({inputDateLast, inputPrimaryDateFirst}: {inputDateLast: string, inputPrimaryDateFirst: string}) {
   const [popularMovies, setPopularMovies] = useState<any>()
+  const [inputPage, setInputPage] = useState<number>(1)
   
   useEffect(() => {
-    if (inputSearch === null) {
+    if (inputPage !== 1) {
       const fetchData = async () => {
-        let total = await fetchPopularMovies(); 
-        setPopularMovies(total);
+        let newMovies = await fetchMoviesFilter(inputPrimaryDateFirst,inputDateLast, inputPage);
+        setPopularMovies((prevMovies: any) => ({
+          
+          results: [...prevMovies.results, ...newMovies.results]
+        }));
       };
       fetchData();
     } else {
       const fetchData = async () => {
-        let total = await fetchPopularMovies(inputSearch); 
+        let total = await fetchMoviesFilter(inputDateLast, inputPrimaryDateFirst, inputPage); 
+        
         setPopularMovies(total);
       };
       fetchData();
     }
-}, [inputSearch]);
+   
+}, [inputDateLast, inputPrimaryDateFirst, inputPage]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -50,7 +56,8 @@ export function ListFilms({inputSearch}: {inputSearch: string | null}) {
         
       </div>
       <div className="text-center mt-6">
-        <Button variant="secondary">Ver Mais</Button>
+        <Button variant="secondary" onClick={() => setInputPage(inputPage + 1)}>Ver Mais</Button>
+        
       </div>
     </div>
   )

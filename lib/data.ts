@@ -142,8 +142,8 @@ export async function fetchPopularMovies(query?: string | null) {
       }
 }
 
-export async function fetchMoviesFilter(page:number, primaryYear: string, query: string, year: string) {
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.NEXT_PUBLIC_TOKEN}&query=${query}&include_adult=false&language=pt-br&primary_release_year=${primaryYear}&page=${page}&year=${year}`;
+export async function fetchMoviesFilter(primaryFirstDate?: string,primaryLastDate?: string | null, page?:number) {
+  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}${primaryFirstDate}${primaryLastDate}&sort_by=popularity.desc`;
   const options = {
       method: 'GET',
       url: url,
@@ -153,6 +153,7 @@ export async function fetchMoviesFilter(page:number, primaryYear: string, query:
       }
   };
   try {
+    console.log(url)
       const response = await axios.request(options);
       return response.data;
   } catch (error) {

@@ -2,18 +2,24 @@
 /* eslint-disable @next/next/no-img-element */
 "use client"
 import { Badge } from "@/components/ui/badge";
-import {  fetchPopularMovies } from "@/lib/data";
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { ListFilms } from "./list-films";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover";
+import { format } from "date-fns";
+import * as React from "react";
 
 export default function ComponentPage() {
-    const [searchMovie, setSearchMovie] = useState<string | null>(null)
-    const [inputSearch, setInputSearch] = useState<string | null>(null)
-    
+    const [primaryDateLast, setPrimaryDateLast] = useState<string>('')
+    const [primaryDateFirst, setPrimaryDateFirst] = useState<string>('')
+    const [dateCalendarLast, setDateCalendarLast] = React.useState<Date>()
+    const [dateCalendarFirst, setDateCalendarFirst] = React.useState<Date>()
     const [movies, setMovies] = useState<any>();
 
     /*useEffect(() => {
@@ -27,8 +33,17 @@ export default function ComponentPage() {
     }, [searchMovie]); */
 
     const handleSearch = () => {
-        
-        setSearchMovie(inputSearch);
+            // Formata a data para "yyyy-MM-dd" antes de usar
+            const formattedDateLast = dateCalendarLast ? format(dateCalendarLast, "yyyy-MM-dd") : '';
+            const dateQueryParamLast = `&primary_release_date.lte=${formattedDateLast}`;
+            const formattedDateFirst = dateCalendarFirst ? format(dateCalendarFirst, "yyyy-MM-dd") : '';
+            const dateQueryParamFirst = `&primary_release_date.gte=${formattedDateFirst}`;
+            console.log(dateQueryParamFirst, dateQueryParamLast)
+            setPrimaryDateFirst(dateQueryParamFirst);
+            setPrimaryDateLast(dateQueryParamLast)
+            
+            // Agora, você pode usar `primaryDateLast` que está no formato desejado
+            // Por exemplo, passando para o componente ListFilms ou para uma API
         
     };
     
@@ -69,15 +84,62 @@ return (
                     <details className="my-6">
                     <summary className="mb-2 font-bold cursor-pointer">Filtros</summary>
                     <div className="grid gap-6">
-                        <div>
+                        {/* <div>
                         <h4 className="mb-2 font-semibold">Título:</h4>
-                        <Input placeholder="Filme..." onChange={(e) => (setInputSearch(`query=${e.target.value}?`))} />
-                        </div>
+                        <Input placeholder="Filme..." onChange={(e) => (setInputSearch(`query=${e.target.value}`))} />
+                        </div> */}
                         <div className="grid gap-4">
                         <h4 className="mb-2 font-semibold">Ano de Lançamento:</h4>
-                        <div className="flex gap-4">
-                            <Input className="flex-1" placeholder="De" />
-                            <Input className="flex-1" placeholder="Até" />
+                        <div className="flex gap-4 flex-wrap">
+                            <div>
+                                <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                        "w-[280px] justify-start text-left font-normal",
+                                        !dateCalendarFirst && "text-muted-foreground"
+                                    )}
+                                    >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {dateCalendarFirst ? format(dateCalendarFirst, "PPP") : <span>De</span>}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 bg-white rounded">
+                                    <Calendar
+                                    mode="single"
+                                    selected={dateCalendarFirst}
+                                    onSelect={setDateCalendarFirst}
+                                    initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                            </div>
+                        
+                            <div>
+                                <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                    variant={"outline"}
+                                    className={cn(
+                                        "w-[280px] justify-start text-left font-normal",
+                                        !dateCalendarLast && "text-muted-foreground"
+                                    )}
+                                    >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {dateCalendarLast ? format(dateCalendarLast, "PPP") : <span>Até</span>}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0 bg-white rounded">
+                                    <Calendar
+                                    mode="single"
+                                    selected={dateCalendarLast}
+                                    onSelect={setDateCalendarLast}
+                                    initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                            </div>
                         </div>
                         </div>
                         <div>
@@ -130,7 +192,7 @@ return (
                 </div>
             </div>
             <div className="order-2 md:order-2 flex-1">
-                <ListFilms inputSearch={searchMovie}/>
+                <ListFilms inputDateLast={primaryDateLast} inputPrimaryDateFirst={primaryDateFirst}/>
             </div>
         </div>
         
