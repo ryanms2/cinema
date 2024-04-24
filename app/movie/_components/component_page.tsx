@@ -20,17 +20,12 @@ export default function ComponentPage() {
     const [primaryDateFirst, setPrimaryDateFirst] = useState<string>('')
     const [dateCalendarLast, setDateCalendarLast] = React.useState<Date>()
     const [dateCalendarFirst, setDateCalendarFirst] = React.useState<Date>()
-    const [movies, setMovies] = useState<any>();
-
-    /*useEffect(() => {
-        const fetchMovies = async () => {
-            if (searchMovie) {
-                const fetchedMovies = await fetchPopularMovies(searchMovie);
-                setMovies(fetchedMovies);
-            }
-        };
-        fetchMovies();
-    }, [searchMovie]); */
+    // Define the initial state
+    const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+    console.log(selectedGenre)
+    const handleBadgeClick = (genre: string) => {
+        setSelectedGenre(genre);
+    };
 
     const handleSearch = () => {
             // Formata a data para "yyyy-MM-dd" antes de usar
@@ -145,14 +140,14 @@ return (
                         <div>
                         <h4 className="mb-2 font-semibold">Gêneros:</h4>
                         <div className="flex flex-wrap gap-2">
-                            <Badge variant="secondary">Ação</Badge>
-                            <Badge variant="secondary">Aventura</Badge>
-                            <Badge variant="secondary">Comédia</Badge>
-                            <Badge variant="secondary">Drama</Badge>
-                            <Badge variant="secondary">Fantasia</Badge>
-                            <Badge variant="secondary">Ficção Científica</Badge>
-                            <Badge variant="secondary">Romance</Badge>
-                            <Badge variant="secondary">Terror</Badge>
+                            <Button className={`${selectedGenre === 'Ação' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Ação')}>Ação</Button>
+                            <Button className={`${selectedGenre === 'Aventura' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Aventura')}>Aventura</Button>
+                            <Button className={`${selectedGenre === 'Comédia' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Comédia')}>Comédia</Button>
+                            <Button className={`${selectedGenre === 'Drama' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Drama')}>Drama</Button>
+                            <Button className={`${selectedGenre === 'Fantasia' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Fantasia')}>Fantasia</Button>
+                            <Button className={`${selectedGenre === 'Ficção Científica' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Ficção Científica')}>Ficção Científica</Button>
+                            <Button className={`${selectedGenre === 'Romance' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Romance')}>Romance</Button>
+                            <Button className={`${selectedGenre === 'Terror' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Terror')}>Terror</Button>
                         </div>
                         </div>
                         <div>
