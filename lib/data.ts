@@ -1,3 +1,4 @@
+"use server"
 import axios from "axios";
 
 export async function fetchAll(query: string) {
@@ -153,7 +154,6 @@ export async function fetchMoviesFilter(primaryFirstDate?: string,primaryLastDat
       }
   };
   try {
-    console.log(url)
       const response = await axios.request(options);
       return response.data;
   } catch (error) {

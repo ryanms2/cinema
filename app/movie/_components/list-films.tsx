@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export function ListFilms({inputDateLast, inputPrimaryDateFirst}: {inputDateLast: string, inputPrimaryDateFirst: string}) {
   const [popularMovies, setPopularMovies] = useState<any>()
   const [inputPage, setInputPage] = useState<number>(1)
-  
+ 
   useEffect(() => {
     if (inputPage !== 1) {
       const fetchData = async () => {
