@@ -20,11 +20,14 @@ export default function ComponentPage() {
     const [primaryDateFirst, setPrimaryDateFirst] = useState<string>('')
     const [dateCalendarLast, setDateCalendarLast] = React.useState<Date>()
     const [dateCalendarFirst, setDateCalendarFirst] = React.useState<Date>()
-    // Define the initial state
-    const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
-    console.log(selectedGenre)
-    const handleBadgeClick = (genre: string) => {
-        setSelectedGenre(genre);
+    const [selectedGenres, setSelectedGenres] = useState<number[] | null>([]);
+    const [genres, setGenres] = useState<number[] | null>([])
+    const handleBadgeClick = (genre: number) => {
+        if (selectedGenres?.includes(genre)) {
+            setSelectedGenres(selectedGenres.filter((g) => g !== genre));
+        } else {
+            setSelectedGenres(selectedGenres ? [...selectedGenres, genre] : [genre]);
+        }
     };
 
     const handleSearch = () => {
@@ -33,9 +36,9 @@ export default function ComponentPage() {
             const dateQueryParamLast = `&primary_release_date.lte=${formattedDateLast}`;
             const formattedDateFirst = dateCalendarFirst ? format(dateCalendarFirst, "yyyy-MM-dd") : '';
             const dateQueryParamFirst = `&primary_release_date.gte=${formattedDateFirst}`;
-            console.log(dateQueryParamFirst, dateQueryParamLast)
             setPrimaryDateFirst(dateQueryParamFirst);
             setPrimaryDateLast(dateQueryParamLast)
+            setGenres(selectedGenres)
             
             // Agora, você pode usar `primaryDateLast` que está no formato desejado
             // Por exemplo, passando para o componente ListFilms ou para uma API
@@ -140,14 +143,14 @@ return (
                         <div>
                         <h4 className="mb-2 font-semibold">Gêneros:</h4>
                         <div className="flex flex-wrap gap-2">
-                            <Button className={`${selectedGenre === 'Ação' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Ação')}>Ação</Button>
-                            <Button className={`${selectedGenre === 'Aventura' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Aventura')}>Aventura</Button>
-                            <Button className={`${selectedGenre === 'Comédia' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Comédia')}>Comédia</Button>
-                            <Button className={`${selectedGenre === 'Drama' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Drama')}>Drama</Button>
-                            <Button className={`${selectedGenre === 'Fantasia' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Fantasia')}>Fantasia</Button>
-                            <Button className={`${selectedGenre === 'Ficção Científica' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Ficção Científica')}>Ficção Científica</Button>
-                            <Button className={`${selectedGenre === 'Romance' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Romance')}>Romance</Button>
-                            <Button className={`${selectedGenre === 'Terror' ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick('Terror')}>Terror</Button>
+                            <Button className={`${selectedGenres?.includes(28) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(28)}>Ação</Button>
+                            <Button className={`${selectedGenres?.includes(12) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(12)}>Aventura</Button>
+                            <Button className={`${selectedGenres?.includes(35) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(35)}>Comédia</Button>
+                            <Button className={`${selectedGenres?.includes(18) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(18)}>Drama</Button>
+                            <Button className={`${selectedGenres?.includes(14) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(14)}>Fantasia</Button>
+                            <Button className={`${selectedGenres?.includes(878) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(878)}>Ficção Científica</Button>
+                            <Button className={`${selectedGenres?.includes(10749) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(10749)}>Romance</Button>
+                            <Button className={`${selectedGenres?.includes(27) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(27)}>Terror</Button>
                         </div>
                         </div>
                         <div>
@@ -187,7 +190,9 @@ return (
                 </div>
             </div>
             <div className="order-2 md:order-2 flex-1">
-                <ListFilms inputDateLast={primaryDateLast} inputPrimaryDateFirst={primaryDateFirst}/>
+                <ListFilms inputDateLast={primaryDateLast}
+                inputPrimaryDateFirst={primaryDateFirst}
+                selectGenres={genres}/>
             </div>
         </div>
         

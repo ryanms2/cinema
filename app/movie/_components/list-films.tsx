@@ -5,14 +5,17 @@ import { Button } from "@/components/ui/button"
 import { fetchMoviesFilter } from "@/lib/data";
 import { useEffect, useState } from "react";
 
-export function ListFilms({inputDateLast, inputPrimaryDateFirst}: {inputDateLast: string, inputPrimaryDateFirst: string}) {
+export function ListFilms({inputDateLast, inputPrimaryDateFirst, selectGenres}: {inputDateLast: string, inputPrimaryDateFirst: string, selectGenres: number[] | null}) {
   const [popularMovies, setPopularMovies] = useState<any>()
   const [inputPage, setInputPage] = useState<number>(1)
  
   useEffect(() => {
+    let genres = selectGenres ? '&with_genres=' + selectGenres.toString() : '';
+    let dateLast = inputDateLast === '&primary_release_date.lte=' ? '' : inputDateLast;
+    let dateFirst = inputPrimaryDateFirst === '&primary_release_date.gte=' ? '' : inputPrimaryDateFirst;
     if (inputPage !== 1) {
       const fetchData = async () => {
-        let newMovies = await fetchMoviesFilter(inputPrimaryDateFirst,inputDateLast, inputPage);
+        let newMovies = await fetchMoviesFilter(dateFirst,dateLast, genres, inputPage);
         setPopularMovies((prevMovies: any) => ({
           
           results: [...prevMovies.results, ...newMovies.results]
@@ -21,14 +24,14 @@ export function ListFilms({inputDateLast, inputPrimaryDateFirst}: {inputDateLast
       fetchData();
     } else {
       const fetchData = async () => {
-        let total = await fetchMoviesFilter(inputDateLast, inputPrimaryDateFirst, inputPage); 
+        let total = await fetchMoviesFilter(dateFirst, dateLast, genres, inputPage); 
         
         setPopularMovies(total);
       };
       fetchData();
     }
    
-}, [inputDateLast, inputPrimaryDateFirst, inputPage]);
+}, [inputDateLast, inputPrimaryDateFirst, selectGenres, inputPage]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
