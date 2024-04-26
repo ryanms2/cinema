@@ -143,8 +143,8 @@ export async function fetchPopularMovies(query?: string | null) {
       }
 }
 
-export async function fetchMoviesFilter(primaryFirstDate?: string, primaryLastDate?: string | null, genres?: string, page?:number) {
-  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}${primaryFirstDate}${primaryLastDate}&sort_by=popularity.desc${genres}`;
+export async function fetchMoviesFilter(primaryFirstDate?: string, primaryLastDate?: string | null, genres?: string, rangeVote?: string, page?:number) {
+  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}${primaryFirstDate}${primaryLastDate}&sort_by=popularity.desc${genres}${rangeVote}`;
   const options = {
       method: 'GET',
       url: url,

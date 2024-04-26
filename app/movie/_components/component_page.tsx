@@ -22,6 +22,12 @@ export default function ComponentPage() {
     const [dateCalendarFirst, setDateCalendarFirst] = React.useState<Date>()
     const [selectedGenres, setSelectedGenres] = useState<number[] | null>([]);
     const [genres, setGenres] = useState<number[] | null>([])
+    const [rangeValue, setRangeValue] = useState<number | undefined>(undefined);
+    const [inputRange, setinputRange] = useState<number | undefined>(undefined);
+
+    const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRangeValue(Number(event.target.value));
+    }
     const handleBadgeClick = (genre: number) => {
         if (selectedGenres?.includes(genre)) {
             setSelectedGenres(selectedGenres.filter((g) => g !== genre));
@@ -36,9 +42,10 @@ export default function ComponentPage() {
             const dateQueryParamLast = `&primary_release_date.lte=${formattedDateLast}`;
             const formattedDateFirst = dateCalendarFirst ? format(dateCalendarFirst, "yyyy-MM-dd") : '';
             const dateQueryParamFirst = `&primary_release_date.gte=${formattedDateFirst}`;
-            setPrimaryDateFirst(dateQueryParamFirst);
+            setPrimaryDateFirst(dateQueryParamFirst)
             setPrimaryDateLast(dateQueryParamLast)
             setGenres(selectedGenres)
+            setinputRange(rangeValue)
             
             // Agora, você pode usar `primaryDateLast` que está no formato desejado
             // Por exemplo, passando para o componente ListFilms ou para uma API
@@ -153,18 +160,19 @@ return (
                             <Button className={`${selectedGenres?.includes(27) ? 'bg-blue-500 text-white' : ''}`} onClick={() => handleBadgeClick(27)}>Terror</Button>
                         </div>
                         </div>
-                        <div>
+                        {/* <div>
                         <h4 className="mb-2 font-semibold">Classificação Etária:</h4>
                         <div className="flex flex-wrap gap-2">
-                            <Badge variant="secondary">L</Badge>
-                            <Badge variant="secondary">10</Badge>
-                            <Badge variant="secondary">12</Badge>
-                            <Badge variant="secondary">14</Badge>
-                            <Badge variant="secondary">16</Badge>
-                            <Badge variant="secondary">18</Badge>
+                            <Button className={`${selectedCertification?.includes('l') ? 'bg-blue-500 text-white' : ''}`}>L</Button>
+                            <Button>10</Button>
+                            <Button>12</Button>
+                            <Button>14</Button>
+                            <Button >16</Button>
+                            <Button>18</Button>
                         </div>
-                        </div>
-                        <div>
+                        </div> */}
+
+                        {/* <div>
                         <h4 className="mb-2 font-semibold">Duração:</h4>
                         <Select>
                             <SelectTrigger id="duration">
@@ -176,12 +184,12 @@ return (
                             <SelectItem value="long">Longa (mais de 2h30min)</SelectItem>
                             </SelectContent>
                         </Select>
-                        </div>
+                        </div> */}
                         <div>
                         <h4 className="mb-2 font-semibold">Avaliação dos Usuários:</h4>
                         <div className="flex items-center gap-4">
-                            <Input className="flex-1" type="range" />
-                            <span className="ml-4 text-sm">4/5</span>
+                            <Input className="flex-1" type="range" min="1" max="10" value={rangeValue} onChange={handleRangeChange} />
+                            <span className="ml-4 text-sm">{!rangeValue ? 1 : rangeValue}/10</span>
                         </div>
                         </div>
                     </div>
@@ -192,7 +200,8 @@ return (
             <div className="order-2 md:order-2 flex-1">
                 <ListFilms inputDateLast={primaryDateLast}
                 inputPrimaryDateFirst={primaryDateFirst}
-                selectGenres={genres}/>
+                selectGenres={genres}
+                inputRange={inputRange} />
             </div>
         </div>
         
