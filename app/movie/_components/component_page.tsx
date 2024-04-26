@@ -1,7 +1,6 @@
 
 /* eslint-disable @next/next/no-img-element */
 "use client"
-import { Badge } from "@/components/ui/badge";
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "@/components/ui/select"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button";
@@ -24,10 +23,17 @@ export default function ComponentPage() {
     const [genres, setGenres] = useState<number[] | null>([])
     const [rangeValue, setRangeValue] = useState<number | undefined>(undefined);
     const [inputRange, setinputRange] = useState<number | undefined>(undefined);
+    const [selectedOrder, setSelectedOrder] = useState<string>('popularity.desc');
+    const [inputOrder, setInputOrder] = useState<string>('popularity.desc');
+
+    const handleOrderChange = (value: string) => {
+        setSelectedOrder(value);
+    }
 
     const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRangeValue(Number(event.target.value));
     }
+    
     const handleBadgeClick = (genre: number) => {
         if (selectedGenres?.includes(genre)) {
             setSelectedGenres(selectedGenres.filter((g) => g !== genre));
@@ -46,7 +52,7 @@ export default function ComponentPage() {
             setPrimaryDateLast(dateQueryParamLast)
             setGenres(selectedGenres)
             setinputRange(rangeValue)
-            
+            setInputOrder(selectedOrder)
             // Agora, você pode usar `primaryDateLast` que está no formato desejado
             // Por exemplo, passando para o componente ListFilms ou para uma API
         
@@ -59,15 +65,15 @@ return (
             
             <div className="order-1 md:order-1 md:sticky top-4 bg-white p-4 rounded-lg  max-w-full md:max-w-xs border-0">
                 <div className="max-w-2xl h-50px mx-auto my-6">
-                    <Select>
-                    <SelectTrigger id="ordering">
-                        <SelectValue placeholder="Ordenar" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="alphabetical">Alfabética</SelectItem>
-                        <SelectItem value="popularity">Popularidade</SelectItem>
-                        <SelectItem value="release-date">Data de lançamento</SelectItem>
-                    </SelectContent>
+                    <Select onValueChange={handleOrderChange}>
+                        <SelectTrigger id="ordering">
+                            <SelectValue placeholder="Ordenar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="vote_average.desc">Média de Votos</SelectItem>
+                            <SelectItem value="popularity.desc">Popularidade</SelectItem>
+                            <SelectItem value="primary_release_date.desc">Data de lançamento</SelectItem>
+                        </SelectContent>
                     </Select>
                     <details className="my-6">
                     <summary className="mb-2 font-bold cursor-pointer">Onde Ver</summary>
@@ -201,7 +207,8 @@ return (
                 <ListFilms inputDateLast={primaryDateLast}
                 inputPrimaryDateFirst={primaryDateFirst}
                 selectGenres={genres}
-                inputRange={inputRange} />
+                inputRange={inputRange}
+                inputOrder={inputOrder} />
             </div>
         </div>
         

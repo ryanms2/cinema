@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { fetchMoviesFilter } from "@/lib/data";
 import { useEffect, useState } from "react";
 
-export function ListFilms({inputDateLast, inputPrimaryDateFirst, selectGenres, inputRange}: {inputDateLast: string, inputPrimaryDateFirst: string, selectGenres: number[] | null, inputRange: number | undefined}) {
+export function ListFilms({inputDateLast, inputPrimaryDateFirst, selectGenres, inputRange, inputOrder}: {inputDateLast: string, inputPrimaryDateFirst: string, selectGenres: number[] | null, inputRange: number | undefined, inputOrder: string}) {
   const [popularMovies, setPopularMovies] = useState<any>()
   const [inputPage, setInputPage] = useState<number>(1)
  
@@ -16,7 +16,7 @@ export function ListFilms({inputDateLast, inputPrimaryDateFirst, selectGenres, i
     let inputRangeValue = inputRange === undefined ? '' : `&vote_average.gte=${inputRange}`;
     if (inputPage !== 1) {
       const fetchData = async () => {
-        let newMovies = await fetchMoviesFilter(dateFirst,dateLast, genres, inputRangeValue, inputPage);
+        let newMovies = await fetchMoviesFilter(dateFirst,dateLast, genres, inputRangeValue, inputOrder, inputPage);
         setPopularMovies((prevMovies: any) => ({
           
           results: [...prevMovies.results, ...newMovies.results]
@@ -25,14 +25,14 @@ export function ListFilms({inputDateLast, inputPrimaryDateFirst, selectGenres, i
       fetchData();
     } else {
       const fetchData = async () => {
-        let total = await fetchMoviesFilter(dateFirst, dateLast, genres, inputRangeValue, inputPage); 
+        let total = await fetchMoviesFilter(dateFirst, dateLast, genres, inputRangeValue, inputOrder, inputPage); 
         
         setPopularMovies(total);
       };
       fetchData();
     }
    
-}, [inputDateLast, inputPrimaryDateFirst, selectGenres, inputRange, inputPage]);
+}, [inputDateLast, inputPrimaryDateFirst, selectGenres, inputRange, inputOrder, inputPage]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
