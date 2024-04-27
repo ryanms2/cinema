@@ -11,16 +11,24 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover";
-import { format } from "date-fns";
+import { subMonths, startOfMonth,format, addMonths } from "date-fns";
 import * as React from "react";
 
 export default function ComponentPage() {
-    const [primaryDateLast, setPrimaryDateLast] = useState<string>('')
-    const [primaryDateFirst, setPrimaryDateFirst] = useState<string>('')
+    const currentDateLast = new Date();
+    const nextMonth = addMonths(currentDateLast, 1);
+    const formattedDateLast = format(startOfMonth(nextMonth), "yyyy-MM-dd");
+    const [primaryDateLast, setPrimaryDateLast] = useState<string>(formattedDateLast);
+
+    const currentDate = new Date();
+    const previousMonth = subMonths(currentDate, 1);
+    const formattedDateFirst = format(previousMonth.setUTCDate(20), "yyyy-MM-dd");
+    const [primaryDateFirst, setPrimaryDateFirst] = useState<string>(formattedDateFirst);
+
     const [dateCalendarLast, setDateCalendarLast] = React.useState<Date>()
     const [dateCalendarFirst, setDateCalendarFirst] = React.useState<Date>()
-    const [selectedGenres, setSelectedGenres] = useState<number[] | null>([]);
-    const [genres, setGenres] = useState<number[] | null>([])
+    const [selectedGenres, setSelectedGenres] = useState<number[] | null>(null);
+    const [genres, setGenres] = useState<number[] | null>(null)
     const [rangeValue, setRangeValue] = useState<number | undefined>(undefined);
     const [inputRange, setinputRange] = useState<number | undefined>(undefined);
     const [selectedOrder, setSelectedOrder] = useState<string>('popularity.desc');
@@ -47,7 +55,7 @@ export default function ComponentPage() {
             const formattedDateLast = dateCalendarLast ? format(dateCalendarLast, "yyyy-MM-dd") : '';
             const dateQueryParamLast = `&primary_release_date.lte=${formattedDateLast}`;
             const formattedDateFirst = dateCalendarFirst ? format(dateCalendarFirst, "yyyy-MM-dd") : '';
-            const dateQueryParamFirst = `&primary_release_date.gte=${formattedDateFirst}`;
+            const dateQueryParamFirst = `${formattedDateFirst}`;
             setPrimaryDateFirst(dateQueryParamFirst)
             setPrimaryDateLast(dateQueryParamLast)
             setGenres(selectedGenres)
@@ -64,6 +72,7 @@ return (
         <div className="flex flex-col md:flex-row gap-4">
             
             <div className="order-1 md:order-1 md:sticky top-4 bg-white p-4 rounded-lg  max-w-full md:max-w-xs border-0">
+                <h1 className="font-extrabold">Filmes em exibição</h1>
                 <div className="max-w-2xl h-50px mx-auto my-6">
                     <Select onValueChange={handleOrderChange}>
                         <SelectTrigger id="ordering">
