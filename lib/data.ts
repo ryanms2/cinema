@@ -195,3 +195,28 @@ export async function fetchMoviesNowPlayingFilter(
     console.error(error)
   }
 }
+
+export async function fetchMoviesUpcomingFilter(
+  primaryFirstDate?: string,
+  primaryLastDate?: string | null,
+  genres?: string,
+  rangeVote?: string,
+  inputOrder?: string,
+  page?: number,
+) {
+  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}&region=br&sort_by=${inputOrder}&with_release_type=2|3${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
