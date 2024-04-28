@@ -220,3 +220,103 @@ export async function fetchMoviesUpcomingFilter(
     console.error(error)
   }
 }
+
+export async function fetchMoviesTopRatedFilter(
+  primaryFirstDate?: string,
+  primaryLastDate?: string | null,
+  genres?: string,
+  rangeVote?: string,
+  inputOrder?: string,
+  page?: number,
+) {
+  const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}&region=br&sort_by=${inputOrder}${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}&without_genres=99,10755&vote_count.gte=200`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchTvFilter(
+  primaryFirstDate?: string,
+  primaryLastDate?: string | null,
+  genres?: string,
+  rangeVote?: string,
+  inputOrder?: string,
+  page?: number,
+) {
+  const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=pt-br&page=${page}${primaryFirstDate}${primaryLastDate}&sort_by=${inputOrder}${genres}${rangeVote}`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchTvAiringTodayFilter(
+  primaryFirstDate?: string,
+  primaryLastDate?: string | null,
+  genres?: string,
+  rangeVote?: string,
+  inputOrder?: string,
+  page?: number,
+) {
+  const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_video=false&language=pt-br&page=${page}&sort_by=${inputOrder}${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchTvTopRatedFilter(
+  primaryFirstDate?: string,
+  primaryLastDate?: string | null,
+  genres?: string,
+  rangeVote?: string,
+  inputOrder?: string,
+  page?: number,
+) {
+  const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_video=false&language=pt-br&page=${page}&region=br&sort_by=${inputOrder}${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}&vote_count.gte=200`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}

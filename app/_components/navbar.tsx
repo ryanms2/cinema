@@ -39,13 +39,13 @@ export function Navbar() {
                 Em Exibição
               </Link>
               <Link
-                href="#"
+                href="/movie/upcoming"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Brevemente
               </Link>
               <Link
-                href="#"
+                href="/movie/top-rated"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Melhor Classificação
@@ -66,25 +66,19 @@ export function Navbar() {
           {showDropdown.series && (
             <div className="absolute py-2 w-48 bg-white rounded-md shadow-xl z-20">
               <Link
-                href="#"
+                href="/tv"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Populares
               </Link>
               <Link
-                href="#"
+                href="/tv/airing-today"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                Em Exibição
+                Emitidos hoje
               </Link>
               <Link
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Brevemente
-              </Link>
-              <Link
-                href="#"
+                href="/tv/top-rated"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Melhor Classificação
