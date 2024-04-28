@@ -12,16 +12,21 @@ export function ListFilms({
   selectGenres,
   inputRange,
   inputOrder,
+  changeGenre,
 }: {
   inputDateLast: string
   inputPrimaryDateFirst: string
   selectGenres: number[] | null
   inputRange: number | undefined
   inputOrder: string
+  changeGenre: number
 }) {
   const [popularMovies, setPopularMovies] = useState<any>()
   const [inputPage, setInputPage] = useState<number>(1)
 
+  useEffect(() => {
+    setInputPage(1)
+  }, [changeGenre])
   useEffect(() => {
     const genres = selectGenres ? '&with_genres=' + selectGenres.toString() : ''
     const dateLast =

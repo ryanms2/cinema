@@ -33,13 +33,17 @@ export default function ComponentPage() {
   const [inputRange, setinputRange] = useState<number | undefined>(undefined)
   const [selectedOrder, setSelectedOrder] = useState<string>('popularity.desc')
   const [inputOrder, setInputOrder] = useState<string>('popularity.desc')
+  const [change, setChange] = useState(0)
+  const [changeGenres, setChangeGenres] = useState(0)
 
   const handleOrderChange = (value: string) => {
     setSelectedOrder(value)
+    setChange((prev) => prev + 1)
   }
 
   const handleRangeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRangeValue(Number(event.target.value))
+    setChange((prev) => prev + 1)
   }
 
   const handleBadgeClick = (genre: number) => {
@@ -47,6 +51,7 @@ export default function ComponentPage() {
       setSelectedGenres(selectedGenres.filter((g) => g !== genre))
     } else {
       setSelectedGenres(selectedGenres ? [...selectedGenres, genre] : [genre])
+      setChange((prev) => prev + 1)
     }
   }
 
@@ -65,6 +70,7 @@ export default function ComponentPage() {
     setGenres(selectedGenres)
     setinputRange(rangeValue)
     setInputOrder(selectedOrder)
+    setChangeGenres(change)
     // Agora, você pode usar `primaryDateLast` que está no formato desejado
     // Por exemplo, passando para o componente ListFilms ou para uma API
   }
@@ -288,6 +294,7 @@ export default function ComponentPage() {
               selectGenres={genres}
               inputRange={inputRange}
               inputOrder={inputOrder}
+              changeGenre={changeGenres}
             />
           </div>
         </div>
