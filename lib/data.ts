@@ -1,7 +1,9 @@
 'use server'
 import axios from 'axios'
+import { unstable_noStore as noStore } from 'next/cache'
 
 export async function fetchAll(query: string) {
+  noStore()
   const url = `https://api.themoviedb.org/3/search/multi?api_key=${process.env.NEXT_PUBLIC_TOKEN}&query=${query}&include_adult=false&language=pt-br`
   const options = {
     method: 'GET',
@@ -24,6 +26,7 @@ export async function fetchAllResult(
   item: string,
   query: string,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/search/${item}?api_key=${process.env.NEXT_PUBLIC_TOKEN}&query=${query}&include_adult=false&language=pt-br&page=${page}`
   const options = {
     method: 'GET',
@@ -42,6 +45,7 @@ export async function fetchAllResult(
 }
 
 export async function fetchMovieAmount(query: string) {
+  noStore()
   const url = `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=pt-br`
 
   const options = {
@@ -62,6 +66,7 @@ export async function fetchMovieAmount(query: string) {
 }
 
 export async function fetchSeriesAmount(query: string) {
+  noStore()
   const url = `https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=false&language=pt-br`
 
   const options = {
@@ -82,6 +87,7 @@ export async function fetchSeriesAmount(query: string) {
 }
 
 export async function fetchCollectionsAmount(query: string) {
+  noStore()
   const url = `https://api.themoviedb.org/3/search/collection?query=${query}&include_adult=false&language=pt-br`
 
   const options = {
@@ -102,6 +108,7 @@ export async function fetchCollectionsAmount(query: string) {
 }
 
 export async function fetchPersonAmount(query: string) {
+  noStore()
   const url = `https://api.themoviedb.org/3/search/person?query=${query}&include_adult=false&language=pt-br`
 
   const options = {
@@ -122,6 +129,7 @@ export async function fetchPersonAmount(query: string) {
 }
 
 export async function fetchPopularMovies(query?: string | null) {
+  noStore()
   let url = `https://api.themoviedb.org/3/movie/popular?${query}language=pt-br&page=1`
   if (!query) {
     url = `https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1`
@@ -154,6 +162,7 @@ export async function fetchMoviesFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}${primaryFirstDate}${primaryLastDate}&sort_by=${inputOrder}${genres}${rangeVote}`
   const options = {
     method: 'GET',
@@ -179,6 +188,7 @@ export async function fetchMoviesNowPlayingFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}&sort_by=${inputOrder}&with_release_type=2|3${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}`
   const options = {
     method: 'GET',
@@ -204,6 +214,7 @@ export async function fetchMoviesUpcomingFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}&region=br&sort_by=${inputOrder}&with_release_type=2|3${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}`
   const options = {
     method: 'GET',
@@ -229,6 +240,7 @@ export async function fetchMoviesTopRatedFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=pt-br&page=${page}&region=br&sort_by=${inputOrder}${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}&without_genres=99,10755&vote_count.gte=200`
   const options = {
     method: 'GET',
@@ -254,6 +266,7 @@ export async function fetchTvFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=pt-br&page=${page}${primaryFirstDate}${primaryLastDate}&sort_by=${inputOrder}${genres}${rangeVote}`
   const options = {
     method: 'GET',
@@ -279,6 +292,7 @@ export async function fetchTvAiringTodayFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_video=false&language=pt-br&page=${page}&sort_by=${inputOrder}${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}`
   const options = {
     method: 'GET',
@@ -304,6 +318,7 @@ export async function fetchTvTopRatedFilter(
   inputOrder?: string,
   page?: number,
 ) {
+  noStore()
   const url = `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_video=false&language=pt-br&page=${page}&region=br&sort_by=${inputOrder}${primaryFirstDate}${primaryLastDate}${genres}${rangeVote}&vote_count.gte=200`
   const options = {
     method: 'GET',
