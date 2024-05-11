@@ -335,3 +335,22 @@ export async function fetchTvTopRatedFilter(
     console.error(error)
   }
 }
+
+export async function fetchPopularPerson(page: number) {
+  noStore()
+  const url = `https://api.themoviedb.org/3/person/popular?language=pt-br&page=${page}`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
