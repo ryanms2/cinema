@@ -34,7 +34,7 @@ export function ComponentPage({
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {totalPages?.results?.map((result: any, index: number) => (
               <Card key={index} className="mb-4">
-                <div className="flex gap-4">
+                <div className="gap-4">
                   <img
                     alt={
                       result.title ||
@@ -42,31 +42,35 @@ export function ComponentPage({
                       result.name ||
                       result.original_name
                     }
-                    className="w-24 h-32 object-cover rounded"
-                    height="120"
+                    className="w-100% h-100% object-cover rounded"
+                    height="100%"
                     src={`https://image.tmdb.org/t/p/w500${result.poster_path || result.profile_path}`}
                     style={{
                       aspectRatio: '90/120',
                       objectFit: 'cover',
                     }}
-                    width="90"
+                    width="100%"
                   />
-                  <div>
-                    <h3 className="text-xl font-bold">
+                  <div className="p-2">
+                    <h3 className="text-xl font-bold text-center">
                       {result.title ||
                         result.original_title ||
                         result.name ||
                         result.original_name}
                     </h3>
                     <p className="text-gray-700">
-                      {result.overview || result.known_for_department
-                        ? result.overview
-                          ? result.overview.substring(0, 220) + '...'
-                          : ''
-                        : ''}
+                      {result.known_for.map(
+                        (participate: any, index: number) => (
+                          <p key={index}>{participate.title}</p>
+                        ),
+                      )}
                     </p>
-                    <p className="text-sm text-gray-500">
-                      {result.release_date}
+                    <p className="text-gray-700">
+                      {result.known_for.map(
+                        (participate: any, index: number) => (
+                          <p key={index}>{participate.name}</p>
+                        ),
+                      )}
                     </p>
                   </div>
                 </div>

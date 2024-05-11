@@ -98,28 +98,10 @@ export function Navbar() {
           {showDropdown.artists && (
             <div className="absolute py-2 w-48 bg-white rounded-md shadow-xl z-20">
               <Link
-                href="#"
+                href="/person"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                Populares
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Em Exibição
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Brevemente
-              </Link>
-              <Link
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Melhor Classificação
+                Artistas Populares
               </Link>
             </div>
           )}
