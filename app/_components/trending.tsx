@@ -2,8 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { CardHeader, CardFooter, Card } from '@/components/ui/card'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
@@ -80,57 +78,27 @@ export function Trending() {
       </div>
       <div className="flex overflow-x-auto w-full max-w-2xl mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8">
         {movies.map((movie: any, index: number) => (
-          <Card className="w-[140px]  border-none" key={index}>
+          <div
+            className="relative"
+            key={index}
+            style={{ width: '200px', flexShrink: 0 }}
+          >
             <img
+              src={`https://media.themoviedb.org/t/p/w300${movie.poster_path}`}
               alt={movie.title}
-              className="rounded-t-lg"
-              height="210"
-              src={`https://media.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`}
-              style={{
-                aspectRatio: '140/210',
-                objectFit: 'cover',
-              }}
-              width="140"
+              className="rounded-lg shadow-lg object-cover"
+              style={{ width: '200px', height: '300px' }}
             />
-            <CardHeader>
-              <Badge className="relative" variant="secondary">
-                {movie.vote_average}{' '}
-                <span className="absolute right-0 top-0  text-black rounded-full p-1">
-                  ★
-                </span>
-              </Badge>
-              <div className="flex justify-between items-center mt-2">
-                <h5 className="text-sm font-bold">{movie.title}</h5>
-                <MoreVerticalIcon className="text-gray-500" />
-              </div>
-            </CardHeader>
-            <CardFooter className="text-xs">
+            <div className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold py-1 px-2 rounded-bl-lg">
+              {movie.vote_average.toFixed(1)} ★
+            </div>
+            <div className="mt-2 text-sm">
+              <p className="font-bold">{movie.title}</p>
               <p>{movie.release_date}</p>
-            </CardFooter>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
     </div>
-  )
-}
-
-function MoreVerticalIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="30"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="12" cy="5" r="1" />
-      <circle cx="12" cy="19" r="1" />
-    </svg>
   )
 }

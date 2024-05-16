@@ -23,7 +23,7 @@ export function Welcome() {
         </p>
         <div className="flex mt-4 mb-8">
           <input
-            className="flex-grow p-2 rounded-l-lg focus:outline-none"
+            className="flex-grow p-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[rgb(37,99,235)] focus:ring-opacity-50 transition-colors bg-white text-[#1F2937]"
             placeholder="Pesquisar por um filme, uma série televisiva, uma pessoa..."
             type="text"
             onChange={(e) => setSearch(e.target.value)}
