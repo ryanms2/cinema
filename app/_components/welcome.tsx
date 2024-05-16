@@ -15,7 +15,7 @@ export function Welcome() {
     return `search${pathname}?${params.toString()}`
   }
   return (
-    <div className="bg-[#1F2937] text-white mt-0.5">
+    <div className="bg-gray-900 text-white mt-0.5">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold">Bem-vindo(a).</h1>
         <p className="text-xl my-2">

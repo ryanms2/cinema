@@ -19,95 +19,93 @@ import {
 } from '@/components/ui/collapsible'
 import { JSX, SVGProps } from 'react'
 
-export default function Navbar() {
+export function Navbar() {
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 bg-gray-900 text-white">
-      <Link className="mr-6 flex items-center" href="#">
+      <Link className="mr-6 flex items-center" href="/">
         <FilmIcon className="h-6 w-6" />
         <span className="text-lg font-semibold">Cine Vault</span>
       </Link>
       <div className="hidden md:flex items-center gap-4">
-        <Collapsible>
-          <CollapsibleTrigger className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+        <div className="relative group">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
             <FilmIcon className="h-4 w-4" />
             <span className="text-base font-medium">Filmes</span>
             <ChevronDownIcon className="ml-auto h-5 w-5 transition-all" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="absolute bg-gray-900 rounded-md shadow-lg p-4 mt-2 w-48 z-50">
+          </div>
+          <div className="absolute bg-gray-900 rounded-md shadow-lg p-4 mt-0 w-48 z-50 hidden group-hover:block">
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/movie"
             >
-              <span className="text-base font-medium">Ação</span>
+              <span className="text-base font-medium">Populares</span>
             </Link>
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/movie/now-playing"
             >
-              <span className="text-base font-medium">Comédia</span>
+              <span className="text-base font-medium">Em exibição</span>
             </Link>
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/movie/upcoming"
             >
-              <span className="text-base font-medium">Drama</span>
+              <span className="text-base font-medium">Em breve</span>
             </Link>
-          </CollapsibleContent>
-        </Collapsible>
-        <Collapsible>
-          <CollapsibleTrigger className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+            <Link
+              className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
+              href="/movie/top-rated"
+            >
+              <span className="text-base font-medium">
+                Melhor Classificação
+              </span>
+            </Link>
+          </div>
+        </div>
+        <div className="relative group">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
             <TvIcon className="h-4 w-4" />
             <span className="text-base font-medium">Séries</span>
             <ChevronDownIcon className="ml-auto h-5 w-5 transition-all" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="absolute bg-gray-900 rounded-md shadow-lg p-4 mt-2 w-48 z-50">
+          </div>
+          <div className="absolute bg-gray-900 rounded-md shadow-lg p-4 mt-0 w-48 z-50 hidden group-hover:block">
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/tv"
             >
-              <span className="text-base font-medium">Ficção</span>
+              <span className="text-base font-medium">Populares</span>
             </Link>
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/tv/airing-today"
             >
-              <span className="text-base font-medium">Suspense</span>
+              <span className="text-base font-medium">Emitidos Hoje</span>
             </Link>
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/tv/top-rated"
             >
-              <span className="text-base font-medium">Documentários</span>
+              <span className="text-base font-medium">
+                Melhor Classificação
+              </span>
             </Link>
-          </CollapsibleContent>
-        </Collapsible>
-        <Collapsible>
-          <CollapsibleTrigger className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+          </div>
+        </div>
+        <div className="relative group">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
             <UsersIcon className="h-4 w-4" />
             <span className="text-base font-medium">Artistas</span>
             <ChevronDownIcon className="ml-auto h-5 w-5 transition-all" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="absolute bg-gray-900 rounded-md shadow-lg p-4 mt-2 w-48 z-50">
+          </div>
+          <div className="absolute bg-gray-900 rounded-md shadow-lg p-4 mt-0 w-48 z-50 hidden group-hover:block">
             <Link
               className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
+              href="/person"
             >
-              <span className="text-base font-medium">Atores</span>
+              <span className="text-base font-medium">Popular</span>
             </Link>
-            <Link
-              className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
-            >
-              <span className="text-base font-medium">Diretores</span>
-            </Link>
-            <Link
-              className="flex items-center gap-2 py-2 hover:bg-gray-800 rounded-md transition-colors"
-              href="#"
-            >
-              <span className="text-base font-medium">Produtores</span>
-            </Link>
-          </CollapsibleContent>
-        </Collapsible>
+          </div>
+        </div>
       </div>
       <div className="ml-auto flex items-center gap-4">
         <div className="relative">
