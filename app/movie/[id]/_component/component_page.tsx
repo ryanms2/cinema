@@ -28,6 +28,24 @@ export function ComponentPage() {
     }
     fetchData()
   }, [])
+  function openVideoOverlay() {
+    const videoUrl = 'https://www.youtube-nocookie.com/embed/va-7FEpUHVQ'
+    const overlay = document.createElement('div')
+    overlay.style.position = 'fixed'
+    overlay.style.top = '0'
+    overlay.style.left = '0'
+    overlay.style.width = '100%'
+    overlay.style.height = '100%'
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'
+    overlay.style.zIndex = '9999'
+    overlay.innerHTML = `
+      <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70%; height: 70%;">
+        <iframe width="100%" height="100%" src="${videoUrl}" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <button style="position: absolute; top: 10px; right: 10px; background-color: #3B82F6; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;" onclick="document.body.removeChild(this.parentNode)">Fechar</button>
+    `
+    document.body.appendChild(overlay)
+  }
   console.log(movie)
   return (
     <div
@@ -39,7 +57,7 @@ export function ComponentPage() {
       }}
     >
       <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/3">
+        <div className="md:w-1/3 flex flex-col items-center">
           <img
             src={`https://media.themoviedb.org/t/p/w300${movie?.poster_path}`}
             alt={movie?.title}
@@ -73,7 +91,10 @@ export function ComponentPage() {
             </span>
           </div>
           <div className="flex items-center mb-4">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l"
+              onClick={() => openVideoOverlay()}
+            >
               <i className="fas fa-play"></i> Ver Trailer
             </button>
             <button className="bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-2 px-4 rounded-r">
