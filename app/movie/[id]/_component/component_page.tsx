@@ -121,7 +121,7 @@ export function ComponentPage() {
             </h2>
             <p className="inline bg-gray-900 rounded-lg p-1">
               PG-13 · {movie?.release_date} (BR) ·{' '}
-              {movie?.genres.map((genre) => `${genre.name} `)} · 1h 55m
+              {movie?.genres.map((genre) => `${genre.name} `)}
             </p>
             <div className="flex items-center my-4">
               <span className="bg-green-500 text-white text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-700 dark:text-green-200">
