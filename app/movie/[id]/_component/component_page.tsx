@@ -3,6 +3,7 @@
 'use client'
 import { fetchDetails, fetchMainCast } from '@/lib/dataMovieDetails'
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import { Recomendations } from './recomendations'
 import { MainCast } from './mainCast'
 
@@ -24,23 +25,27 @@ interface Movie {
 }
 
 export function ComponentPage() {
+  const params = useParams()
+  const id = String(params.id)
   const [movie, setMovie] = useState<Movie | null>(null)
   const [showInfo, setShowInfo] = useState(false)
   const [principalCast, setPrincipalCast] = useState<any[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const total = await fetchDetails(823464)
+      const total = await fetchDetails(id || '')
       if (total) {
         setMovie(total)
       }
     }
-    fetchData()
-  }, [])
+    if (params.id) {
+      fetchData()
+    }
+  }, [id, params.id])
 
   useEffect(() => {
     const fetchData = async () => {
-      const total = await fetchMainCast(823464)
+      const total = await fetchMainCast(id || '')
       if (total && total.crew) {
         const screenplay = total.crew
           .filter((member: any) => member.job === 'Screenplay')
@@ -61,8 +66,11 @@ export function ComponentPage() {
         ])
       }
     }
-    fetchData()
-  }, [])
+    if (params.id) {
+      fetchData()
+    }
+  }, [id, params.id])
+
   function openVideoOverlay() {
     const videoUrl = 'https://www.youtube-nocookie.com/embed/va-7FEpUHVQ'
     const overlay = document.createElement('div')
@@ -228,7 +236,7 @@ export function ComponentPage() {
         </div>
       </div>
       <MainCast />
-      <Recomendations />
+      <Recomendations idMovie={id} />
     </>
   )
 }

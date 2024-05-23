@@ -20,16 +20,16 @@ interface Movie {
   genres: { id: number; name: string }[]
 }
 
-export function Recomendations() {
+export function Recomendations({ idMovie }: { idMovie: string }) {
   const [movies, setMovies] = useState<Movie | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      const total = await fetchRecomendations(823464)
+      const total = await fetchRecomendations(idMovie || '')
       setMovies(total)
     }
     fetchData()
-  }, [])
+  }, [idMovie])
 
   return (
     <div className="bg-white dark:bg-zinc-800 p-4">

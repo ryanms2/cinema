@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { fetchMainCast } from '@/lib/dataMovieDetails'
+import { useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
 interface MainCast {
@@ -14,14 +15,15 @@ interface MainCast {
 
 export function MainCast() {
   const [cast, setCast] = useState<MainCast | null>(null)
-
+  const params = useParams()
+  const id = String(params.id)
   useEffect(() => {
     const fetchData = async () => {
-      const total = await fetchMainCast(823464)
+      const total = await fetchMainCast(id || '')
       setCast(total)
     }
     fetchData()
-  }, [])
+  }, [params.id, id])
   return (
     <div className="bg-white dark:bg-zinc-800 p-4">
       <h2 className="text-2xl font-bold mb-4 text-zinc-900 dark:text-white">
