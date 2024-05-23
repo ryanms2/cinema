@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { fetchDetails } from '@/lib/dataMovieDetails'
+import { fetchDetails, fetchMainCast } from '@/lib/dataMovieDetails'
 import { useEffect, useState } from 'react'
 import { Recomendations } from './recomendations'
 import { MainCast } from './mainCast'
@@ -18,20 +18,51 @@ interface Movie {
   tagline: string
   overview: string
   genres: { id: number; name: string }[]
+  status: string
+  budget: number
+  revenue: number
 }
 
 export function ComponentPage() {
   const [movie, setMovie] = useState<Movie | null>(null)
   const [showInfo, setShowInfo] = useState(false)
+  const [principalCast, setPrincipalCast] = useState<any[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       const total = await fetchDetails(823464)
-      setMovie(total)
+      if (total) {
+        setMovie(total)
+      }
     }
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const total = await fetchMainCast(823464)
+      if (total && total.crew) {
+        const screenplay = total.crew
+          .filter((member: any) => member.job === 'Screenplay')
+          .map((member: any) => member.original_name)
+        const story = total.crew
+          .filter((member: any) => member.job === 'Story')
+          .map((member: any) => member.original_name)
+        const director = total.crew
+          .filter((member: any) => member.known_for_department === 'Directing')
+          .map((member: any) => member.original_name)
+        const uniqueScreenplay = Array.from(new Set(screenplay))
+        const uniqueStory = Array.from(new Set(story))
+        const uniqueDirector = Array.from(new Set(director))
+        setPrincipalCast([
+          { role: 'screenplay', members: uniqueScreenplay },
+          { role: 'story', members: uniqueStory },
+          { role: 'director', members: uniqueDirector },
+        ])
+      }
+    }
+    fetchData()
+  }, [])
   function openVideoOverlay() {
     const videoUrl = 'https://www.youtube-nocookie.com/embed/va-7FEpUHVQ'
     const overlay = document.createElement('div')
@@ -58,8 +89,6 @@ export function ComponentPage() {
   function closeInfoOverlay() {
     setShowInfo(false)
   }
-
-  console.log(movie)
   return (
     <>
       <div
@@ -130,7 +159,7 @@ export function ComponentPage() {
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 text-center">
-                    Avengers: Endgame
+                    {movie?.original_title}
                   </h3>
                   <button
                     className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
@@ -143,34 +172,40 @@ export function ComponentPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 text-center">
-                      Release Status
+                      Estado de Lançamento
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      Released
+                      {movie?.status}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 text-center">
-                      Budget
+                      Orçamento
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      $400M
+                      {movie?.budget.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 text-center">
-                      Box Office
+                      Bilheteria
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      $2.798B
+                      {movie?.revenue.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 text-center">
-                      Release Date
+                      Data de Lançamento
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      April 26, 2019
+                      {movie?.release_date}
                     </p>
                   </div>
                 </div>
@@ -181,10 +216,12 @@ export function ComponentPage() {
             </p>
             <div className="text-zinc-400">
               <p>
-                <strong>Director:</strong> Adam Wingard
+                <strong>Director:</strong>{' '}
+                {principalCast[2]?.members.join(', ')}
               </p>
               <p>
-                <strong>Screenplay, Story:</strong> Terry Rossio, Jeremy Slater
+                <strong>Screenplay, Story:</strong>{' '}
+                {principalCast[0]?.members.join(', ')}{' '}
               </p>
             </div>
           </div>

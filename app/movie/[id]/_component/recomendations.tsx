@@ -21,12 +21,12 @@ interface Movie {
 }
 
 export function Recomendations() {
-  const [movie, setMovie] = useState<Movie | null>(null)
+  const [movies, setMovies] = useState<Movie | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       const total = await fetchRecomendations(823464)
-      setMovie(total)
+      setMovies(total)
     }
     fetchData()
   }, [])
@@ -38,22 +38,19 @@ export function Recomendations() {
           Recomendações
         </h2>
         <div className="flex overflow-x-auto gap-4">
-          {movie?.results.map((item: any) => (
+          {movies?.results.map((movie: any) => (
             <div
               className="flex-none w-48 bg-zinc-100 dark:bg-zinc-700 rounded-lg p-2"
-              key={item.id}
+              key={movie.id}
             >
               <img
-                className="w-full h-32 object-cover rounded-lg"
-                src="https://placehold.co/150x150"
-                alt="Rebecca Hall"
+                className="w-full h-100 object-cover rounded-lg"
+                src={`https://media.themoviedb.org/t/p/w300${movie?.backdrop_path}`}
+                alt={movie.title}
               />
               <div className="mt-2 text-center">
                 <p className="text-sm font-semibold text-zinc-900 dark:text-white">
-                  {item.title}
-                </p>
-                <p className="text-xs text-zinc-600 dark:text-zinc-300">
-                  Dr. Ilene Andrews
+                  {movie.title}
                 </p>
               </div>
             </div>
