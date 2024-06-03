@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { fetchDetails, fetchMainCast } from '@/lib/dataMovieDetails'
+import {
+  fetchDetails,
+  fetchMainCast,
+  fetchMovieTrailer,
+} from '@/lib/dataMovieDetails'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Recomendations } from './recomendations'
@@ -30,30 +34,26 @@ export function ComponentPage() {
   const [movie, setMovie] = useState<Movie | null>(null)
   const [showInfo, setShowInfo] = useState(false)
   const [principalCast, setPrincipalCast] = useState<any[]>([])
+  const [trailerKey, setTrailerKey] = useState<any>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const total = await fetchDetails(id || '')
-      if (total) {
-        setMovie(total)
-      }
-    }
-    if (params.id) {
-      fetchData()
-    }
-  }, [id, params.id])
+      const [details, mainCast, trailer] = await Promise.all([
+        fetchDetails(id || ''),
+        fetchMainCast(id || ''),
+        fetchMovieTrailer(id),
+      ])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const total = await fetchMainCast(id || '')
-      if (total && total.crew) {
-        const screenplay = total.crew
+      setMovie(details)
+
+      if (mainCast && mainCast.crew) {
+        const screenplay = mainCast.crew
           .filter((member: any) => member.job === 'Screenplay')
           .map((member: any) => member.original_name)
-        const story = total.crew
+        const story = mainCast.crew
           .filter((member: any) => member.job === 'Story')
           .map((member: any) => member.original_name)
-        const director = total.crew
+        const director = mainCast.crew
           .filter((member: any) => member.known_for_department === 'Directing')
           .map((member: any) => member.original_name)
         const uniqueScreenplay = Array.from(new Set(screenplay))
@@ -65,14 +65,20 @@ export function ComponentPage() {
           { role: 'director', members: uniqueDirector },
         ])
       }
+
+      setTrailerKey(trailer)
     }
+
     if (params.id) {
       fetchData()
     }
   }, [id, params.id])
 
   function openVideoOverlay() {
-    const videoUrl = 'https://www.youtube-nocookie.com/embed/va-7FEpUHVQ'
+    const videoUrl =
+      'https://www.youtube-nocookie.com/embed/' +
+      trailerKey.results[0].key +
+      '?autoplay=1&mute=1&enablejsapi=1&origin=https://www.themoviedb.org&widgetid=1'
     const overlay = document.createElement('div')
     overlay.style.position = 'fixed'
     overlay.style.top = '0'
@@ -89,7 +95,7 @@ export function ComponentPage() {
     `
     document.body.appendChild(overlay)
   }
-
+  console.log(movie)
   function openInfoOverlay() {
     setShowInfo(true)
   }
