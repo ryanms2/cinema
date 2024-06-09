@@ -16,6 +16,7 @@ import Search from './search'
 import { useEffect, useState } from 'react'
 import Pagination from './pagination'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function ComponentPage({
   searchParams,
@@ -134,44 +135,48 @@ export default function ComponentPage({
           </div>
           <div className="col-span-3">
             {totalPages?.results?.map((result: any, index: number) => (
-              <Card key={index} className="mb-4">
-                <div className="flex gap-4">
-                  <img
-                    alt={
-                      result.title ||
-                      result.original_title ||
-                      result.name ||
-                      result.original_name
-                    }
-                    className="w-24 h-32 object-cover rounded"
-                    height="120"
-                    src={`https://image.tmdb.org/t/p/w500${result.poster_path || result.profile_path}`}
-                    style={{
-                      aspectRatio: '90/120',
-                      objectFit: 'cover',
-                    }}
-                    width="90"
-                  />
-                  <div>
-                    <h3 className="text-xl font-bold">
-                      {result.title ||
-                        result.original_title ||
-                        result.name ||
-                        result.original_name}
-                    </h3>
-                    <p className="text-gray-700">
-                      {result.overview || result.known_for_department
-                        ? result.overview
-                          ? result.overview.substring(0, 220) + '...'
-                          : ''
-                        : ''}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {result.release_date}
-                    </p>
+              <Link href={`/movie/${result.id}`} key={index}>
+                <Card className="mb-4 cursor-pointer">
+                  <div className="flex gap-4">
+                    <div className="relative">
+                      <img
+                        alt={
+                          result.title ||
+                          result.original_title ||
+                          result.name ||
+                          result.original_name
+                        }
+                        className="w-300 h-48 object-cover rounded"
+                        height="192"
+                        src={`https://image.tmdb.org/t/p/w200${result.poster_path || result.profile_path}`}
+                        style={{
+                          aspectRatio: '90/120',
+                          objectFit: 'cover',
+                        }}
+                        width="300"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold hover:text-gray-800 transition-colors duration-300">
+                        {result.title ||
+                          result.original_title ||
+                          result.name ||
+                          result.original_name}
+                      </h3>
+                      <p className="text-gray-700">
+                        {result.overview || result.known_for_department
+                          ? result.overview
+                            ? result.overview.substring(0, 220) + '...'
+                            : ''
+                          : ''}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {result.release_date}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             ))}
             <Pagination totalPages={page} />
           </div>
