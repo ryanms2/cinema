@@ -5,6 +5,7 @@ import {
   fetchDetails,
   fetchMainCast,
   fetchMovieTrailer,
+  fetchWatchProviders,
 } from '@/lib/dataMovieDetails'
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
@@ -35,16 +36,19 @@ export function ComponentPage() {
   const [showInfo, setShowInfo] = useState(false)
   const [principalCast, setPrincipalCast] = useState<any[]>([])
   const [trailerKey, setTrailerKey] = useState<any>([])
+  const [provaider, setProvaider] = useState<any>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const [details, mainCast, trailer] = await Promise.all([
+      const [details, mainCast, trailer, providers] = await Promise.all([
         fetchDetails(id || ''),
         fetchMainCast(id || ''),
         fetchMovieTrailer(id),
+        fetchWatchProviders(id),
       ])
 
       setMovie(details)
+      setProvaider(providers)
 
       if (mainCast && mainCast.crew) {
         const screenplay = mainCast.crew
@@ -122,19 +126,32 @@ export function ComponentPage() {
             />
 
             <p className="text-center mt-2 text-zinc-400">
-              Disponível em:{' '}
-              <span className="text-white">Netflix, HBO Max</span>
+              Disponível em: &nbsp;
+              {
+                provaider.results?.BR?.flatrate
+                  ?.map((item: any, index: number) => (
+                    <span className="text-white" key={index}>
+                      {item.provider_name.split(' ')[0]}
+                    </span>
+                  ))
+                  .filter(
+                    (value: any, index: any, self: string | any[]) =>
+                      self.indexOf(value) === index,
+                  )[0]
+              }
             </p>
           </div>
           <div className="md:w-2/3 md:pl-6 mt-4 md:mt-0">
             <h2 className="text-3xl font-bold mb-2">
               {movie?.title ||
-                movie?.original_title ||
                 movie?.name ||
+                movie?.original_title ||
                 movie?.original_name}
             </h2>
             <p className="inline bg-gray-900 rounded-lg p-1">
-              PG-13 · {movie?.release_date} (BR) ·{' '}
+              {movie?.release_date
+                ? new Date(movie.release_date).toLocaleDateString('pt-BR')
+                : 'Data de Lançamento Indisponível'}{' '}
               {movie?.genres.map((genre) => `${genre.name} `)}
             </p>
             <div className="flex items-center my-4">
@@ -219,7 +236,11 @@ export function ComponentPage() {
                       Data de Lançamento
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      {movie?.release_date}
+                      {movie?.release_date
+                        ? new Date(movie.release_date).toLocaleDateString(
+                            'pt-BR',
+                          )
+                        : ''}
                     </p>
                   </div>
                 </div>

@@ -72,3 +72,21 @@ export async function fetchMovieTrailer(idMovie: string) {
     console.error(error)
   }
 }
+
+export async function fetchWatchProviders(idMovie: string) {
+  const url = `https://api.themoviedb.org/3/movie/${idMovie}/watch/providers`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
