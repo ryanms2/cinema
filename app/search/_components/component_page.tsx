@@ -12,13 +12,13 @@ import {
   fetchSeriesAmount,
 } from '@/lib/data'
 import { Button } from '@/components/ui/button'
-import Search from './search'
+import { Search } from './search'
 import { useEffect, useState } from 'react'
-import Pagination from './pagination'
+import { Pagination } from './pagination'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-export default function ComponentPage({
+export function ComponentPage({
   searchParams,
 }: {
   searchParams?: {

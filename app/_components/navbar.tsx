@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+'use client'
 
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
@@ -17,9 +18,36 @@ import {
   CollapsibleContent,
   Collapsible,
 } from '@/components/ui/collapsible'
-import { JSX, SVGProps } from 'react'
+import { JSX, SVGProps, useState } from 'react'
+import { useSearchParams, usePathname, useRouter } from 'next/navigation'
+import { useDebouncedCallback } from 'use-debounce'
 
 export function Navbar() {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  const [search, setSearch] = useState<string | null>(null)
+
+  const handleSearch = useDebouncedCallback((term: string) => {
+    const params = new URLSearchParams(searchParams)
+    setSearch(term)
+    params.set('page', '1')
+    if (term) {
+      params.set('query', term)
+    } else {
+      params.delete('query')
+    }
+    replace(`${pathname}?${params.toString()}`)
+  }, 300)
+
+  const createPageURL = (term: string | null) => {
+    const params = new URLSearchParams(searchParams)
+    if (term) {
+      params.set('query', term)
+    }
+    return `search${pathname}?${params.toString()}`
+  }
+
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 bg-gray-900 text-white">
       <Link className="mr-6 flex items-center" href="/">
@@ -113,6 +141,26 @@ export function Navbar() {
             className="h-9 w-40 rounded-md bg-gray-800 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-600"
             placeholder="Pesquisar..."
             type="search"
+            onKeyDown={(e) => {
+              if (
+                (e as unknown as React.KeyboardEvent<HTMLInputElement>).key ===
+                'Enter'
+              ) {
+                window.location.href = createPageURL(search)
+              }
+            }}
+            onChange={(e) => {
+              if (
+                (e as unknown as React.KeyboardEvent<HTMLInputElement>).key ===
+                'Enter'
+              ) {
+                window.location.href = createPageURL(e.target.value)
+                alert('Pesquisar')
+              } else {
+                handleSearch(e.target.value)
+              }
+            }}
+            defaultValue={searchParams.get('query')?.toString()}
           />
           <SearchIcon className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500" />
         </div>
