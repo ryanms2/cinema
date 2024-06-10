@@ -149,7 +149,7 @@ export function Navbar() {
       </div>
       <Sheet>
         <SheetTrigger asChild>
-          <Button className="lg:hidden" size="icon" variant="ghost">
+          <Button className="md:hidden" size="icon" variant="ghost">
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
@@ -166,21 +166,27 @@ export function Navbar() {
                 <CollapsibleContent className="pl-6 space-y-2">
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/movie"
                   >
-                    Ação
+                    Populares
                   </Link>
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/movie/now-playing"
                   >
-                    Comédia
+                    Em exibição
                   </Link>
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/movie/upcoming"
                   >
-                    Drama
+                    Em breve
+                  </Link>
+                  <Link
+                    className="flex w-full items-center py-1 text-base font-medium"
+                    href="/movie/top-rated"
+                  >
+                    Melhor classificação
                   </Link>
                 </CollapsibleContent>
               </div>
@@ -195,21 +201,21 @@ export function Navbar() {
                 <CollapsibleContent className="pl-6 space-y-2">
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/tv"
                   >
-                    Ficção
+                    Populares
                   </Link>
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/tv/airing-today"
                   >
-                    Suspense
+                    Emitidos Hoje
                   </Link>
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/tv/top-rated"
                   >
-                    Documentários
+                    Melhor classificação
                   </Link>
                 </CollapsibleContent>
               </div>
@@ -224,21 +230,9 @@ export function Navbar() {
                 <CollapsibleContent className="pl-6 space-y-2">
                   <Link
                     className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
+                    href="/person"
                   >
-                    Atores
-                  </Link>
-                  <Link
-                    className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
-                  >
-                    Diretores
-                  </Link>
-                  <Link
-                    className="flex w-full items-center py-1 text-base font-medium"
-                    href="#"
-                  >
-                    Produtores
+                    Popular
                   </Link>
                 </CollapsibleContent>
               </div>

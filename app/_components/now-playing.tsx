@@ -102,7 +102,7 @@ export function NowPlaying() {
           </div>
         </div>
       </div>
-      <div className="flex overflow-x-auto w-full max-w-2xl mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8">
+      <div className="flex overflow-x-auto w-full mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8">
         {movies.map((movie: any, index: number) => (
           <Link href={`/movie/${movie.id}`} key={index}>
             <div
