@@ -3,7 +3,6 @@
 'use client'
 import {
   fetchDetails,
-  fetchMainCast,
   fetchTvTrailer,
   fetchWatchProviders,
 } from '@/lib/dataTvDetails'
@@ -30,6 +29,7 @@ interface Tv {
   status: string
   number_of_seasons: number
   number_of_episodes: number
+  created_by: { name: string }[]
 }
 
 export function ComponentPage() {
@@ -37,41 +37,19 @@ export function ComponentPage() {
   const id = String(params.id)
   const [tv, setTv] = useState<Tv | null>(null)
   const [showInfo, setShowInfo] = useState(false)
-  const [principalCast, setPrincipalCast] = useState<any[]>([])
   const [trailerKey, setTrailerKey] = useState<any>([])
   const [provaider, setProvaider] = useState<any>([])
 
   useEffect(() => {
     const fetchData = async () => {
-      const [details, mainCast, trailer, providers] = await Promise.all([
+      const [details, trailer, providers] = await Promise.all([
         fetchDetails(id || ''),
-        fetchMainCast(id || ''),
         fetchTvTrailer(id),
         fetchWatchProviders(id),
       ])
 
       setTv(details)
       setProvaider(providers)
-
-      if (mainCast && mainCast.crew) {
-        const screenplay = mainCast.crew
-          .filter((member: any) => member.job === 'Screenplay')
-          .map((member: any) => member.original_name)
-        const story = mainCast.crew
-          .filter((member: any) => member.job === 'Story')
-          .map((member: any) => member.original_name)
-        const director = mainCast.crew
-          .filter((member: any) => member.known_for_department === 'Directing')
-          .map((member: any) => member.original_name)
-        const uniqueScreenplay = Array.from(new Set(screenplay))
-        const uniqueStory = Array.from(new Set(story))
-        const uniqueDirector = Array.from(new Set(director))
-        setPrincipalCast([
-          { role: 'screenplay', members: uniqueScreenplay },
-          { role: 'story', members: uniqueStory },
-          { role: 'director', members: uniqueDirector },
-        ])
-      }
 
       setTrailerKey(trailer)
     }
@@ -128,21 +106,28 @@ export function ComponentPage() {
               className="rounded-lg shadow-md"
             />
 
-            <p className="text-center mt-2 text-zinc-400">
-              Disponível em: &nbsp;
-              {
-                provaider.results?.BR?.flatrate
-                  ?.map((item: any, index: number) => (
-                    <span className="text-white" key={index}>
-                      {item.provider_name.split(' ')[0]}
+            {
+              provaider.results?.BR?.flatrate
+                ?.map((item: any, index: number) => (
+                  <p className="text-center mt-2 text-zinc-400" key={index}>
+                    Disponível em: &nbsp;
+                    <span className="text-white">
+                      <img
+                        src={
+                          'https://media.themoviedb.org/t/p/original/' +
+                          item.logo_path
+                        }
+                        alt={item.provider_name}
+                        className="w-10 h-10 inline-block mr-1 rounded-lg"
+                      />
                     </span>
-                  ))
-                  .filter(
-                    (value: any, index: any, self: string | any[]) =>
-                      self.indexOf(value) === index,
-                  )[0]
-              }
-            </p>
+                  </p>
+                ))
+                .filter(
+                  (value: any, index: any, self: string | any[]) =>
+                    self.indexOf(value) === index,
+                )[0]
+            }
           </div>
           <div className="md:w-2/3 md:pl-6 mt-4 md:mt-0">
             <h2 className="text-3xl font-bold mb-2">
@@ -255,12 +240,8 @@ export function ComponentPage() {
             </p>
             <div className="text-zinc-400">
               <p>
-                <strong>Director:</strong>{' '}
-                {principalCast[2]?.members.join(', ')}
-              </p>
-              <p>
-                <strong>Screenplay, Story:</strong>{' '}
-                {principalCast[0]?.members.join(', ')}{' '}
+                <strong>Criado por:</strong>{' '}
+                {tv?.created_by?.map((creator) => creator.name).join(', ')}
               </p>
             </div>
           </div>

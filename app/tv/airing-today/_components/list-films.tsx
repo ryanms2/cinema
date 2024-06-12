@@ -110,13 +110,11 @@ export function ListFilms({
                     result.original_name}
                 </h3>
                 <span className="text-white text-sm">
-                  {format(
-                    new Date(result.release_date || result.first_air_date),
-                    'dd MMM yyyy',
-                    {
-                      locale: ptBR,
-                    },
-                  )}
+                  {result?.first_air_date
+                    ? format(new Date(result.first_air_date), 'dd MMM yyyy', {
+                        locale: ptBR,
+                      })
+                    : ''}
                 </span>
               </div>
             </div>
