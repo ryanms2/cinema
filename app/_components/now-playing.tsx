@@ -3,6 +3,8 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -131,7 +133,11 @@ export function NowPlaying() {
               </div>
               <div className="mt-2 text-sm">
                 <p className="font-bold">{movie.title}</p>
-                <p>{movie.release_date}</p>
+                <p>
+                  {format(new Date(movie.release_date), 'dd MMM yyyy', {
+                    locale: ptBR,
+                  })}
+                </p>
               </div>
             </div>
           </Link>

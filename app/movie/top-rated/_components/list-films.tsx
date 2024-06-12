@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { fetchMoviesTopRatedFilter } from '@/lib/data'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export function ListFilms({
   inputDateLast,
@@ -110,7 +112,9 @@ export function ListFilms({
                     result.original_name}
                 </h3>
                 <span className="text-white text-sm">
-                  {result.release_date}
+                  {format(new Date(result.release_date), 'dd MMM yyyy', {
+                    locale: ptBR,
+                  })}
                 </span>
               </div>
             </div>

@@ -17,6 +17,8 @@ import { useEffect, useState } from 'react'
 import { Pagination } from './pagination'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export function ComponentPage({
   searchParams,
@@ -78,6 +80,7 @@ export function ComponentPage({
     }
     fetchData()
   }, [query, selectedItem, currentPage])
+  console.log(totalPages)
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -135,7 +138,10 @@ export function ComponentPage({
           </div>
           <div className="col-span-3">
             {totalPages?.results?.map((result: any, index: number) => (
-              <Link href={`/movie/${result.id}`} key={index}>
+              <Link
+                href={`/${selectedItem !== 'multi' ? selectedItem : result.media_type}/${result.id}`}
+                key={index}
+              >
                 <Card className="mb-4 cursor-pointer">
                   <div className="flex gap-4">
                     <div className="relative">
@@ -171,7 +177,15 @@ export function ComponentPage({
                           : ''}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {result.release_date}
+                        {result.release_date
+                          ? format(
+                              new Date(result.release_date),
+                              'dd MMM yyyy',
+                              {
+                                locale: ptBR,
+                              },
+                            )
+                          : ''}
                       </p>
                     </div>
                   </div>
