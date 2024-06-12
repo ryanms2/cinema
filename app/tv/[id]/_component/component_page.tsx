@@ -11,6 +11,9 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Recomendations } from './recomendations'
 import { MainCast } from './mainCast'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { toast } from '@/components/ui/use-toast'
 
 interface Tv {
   poster_path: string
@@ -20,13 +23,13 @@ interface Tv {
   name?: string
   original_name?: string
   vote_average: number
-  release_date: string
+  first_air_date: string
   tagline: string
   overview: string
   genres: { id: number; name: string }[]
   status: string
-  budget: number
-  revenue: number
+  number_of_seasons: number
+  number_of_episodes: number
 }
 
 export function ComponentPage() {
@@ -146,9 +149,12 @@ export function ComponentPage() {
               {tv?.title || tv?.name || tv?.original_title || tv?.original_name}
             </h2>
             <p className="inline bg-gray-900 rounded-lg p-1">
-              {tv?.release_date
-                ? new Date(tv.release_date).toLocaleDateString('pt-BR')
-                : 'Data de Lançamento Indisponível'}{' '}
+              {tv?.first_air_date
+                ? format(new Date(tv.first_air_date), 'dd MMM yyyy', {
+                    locale: ptBR,
+                  })
+                : 'Data de Lançamento Indisponível'}
+              {', '}
               {tv?.genres.map((genre) => `${genre.name} `)}
             </p>
             <div className="flex items-center my-4">
@@ -165,10 +171,17 @@ export function ComponentPage() {
             <div className="flex items-center mb-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l"
-                onClick={() => openVideoOverlay()}
+                onClick={() =>
+                  !trailerKey.results[0]?.key
+                    ? toast({
+                        title: 'Trailer Indisponível',
+                      })
+                    : openVideoOverlay()
+                }
               >
                 <i className="fas fa-play"></i> Ver Trailer
               </button>
+
               <button
                 className="bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-2 px-4 rounded-r"
                 onClick={() => openInfoOverlay()}
@@ -208,24 +221,18 @@ export function ComponentPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 text-center">
-                      Orçamento
+                      Temporadas
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      {tv?.budget.toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
+                      {tv?.number_of_seasons}
                     </p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1 text-center">
-                      Bilheteria
+                      Episódios
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      {tv?.revenue.toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
+                      {tv?.number_of_episodes}
                     </p>
                   </div>
                   <div>
@@ -233,8 +240,10 @@ export function ComponentPage() {
                       Data de Lançamento
                     </p>
                     <p className="text-gray-900 dark:text-gray-100 font-medium text-center">
-                      {tv?.release_date
-                        ? new Date(tv.release_date).toLocaleDateString('pt-BR')
+                      {tv?.first_air_date
+                        ? format(new Date(tv.first_air_date), 'dd MMM yyyy', {
+                            locale: ptBR,
+                          })
                         : ''}
                     </p>
                   </div>
