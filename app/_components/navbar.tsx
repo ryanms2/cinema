@@ -27,6 +27,7 @@ export function Navbar() {
   const pathname = usePathname()
   const { replace } = useRouter()
   const [search, setSearch] = useState<string | null>(null)
+  const isLoggedIn = false
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams)
@@ -164,36 +165,67 @@ export function Navbar() {
           />
           <SearchIcon className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500" />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              className="rounded-full border border-gray-700 w-9 h-9"
-              size="icon"
-              variant="ghost"
-            >
-              <img
-                alt="Avatar"
-                className="rounded-full"
-                height="36"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: '36/36',
-                  objectFit: 'cover',
-                }}
-                width="36"
-              />
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Perfil</DropdownMenuItem>
-            <DropdownMenuItem>Configurações</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Sair</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {isLoggedIn ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className="rounded-full border border-gray-700 w-9 h-9"
+                size="icon"
+                variant="ghost"
+              >
+                <img
+                  alt="Avatar"
+                  className="rounded-full"
+                  height="36"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: '36/36',
+                    objectFit: 'cover',
+                  }}
+                  width="36"
+                />
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Perfil</DropdownMenuItem>
+              <DropdownMenuItem>Configurações</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Sair</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className="rounded-full border border-gray-700 w-9 h-9"
+                size="icon"
+                variant="ghost"
+              >
+                <img
+                  alt="Avatar"
+                  className="rounded-full"
+                  height="36"
+                  src="/placeholder.svg"
+                  style={{
+                    aspectRatio: '36/36',
+                    objectFit: 'cover',
+                  }}
+                  width="36"
+                />
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Bem-vindo</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Criar Conta</DropdownMenuItem>
+              <DropdownMenuItem>Login</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       <Sheet>
         <SheetTrigger asChild>
