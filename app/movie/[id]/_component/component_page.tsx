@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Recomendations } from './recomendations'
 import { MainCast } from './mainCast'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 interface Movie {
   poster_path: string
@@ -125,21 +127,28 @@ export function ComponentPage() {
               className="rounded-lg shadow-md"
             />
 
-            <p className="text-center mt-2 text-zinc-400">
-              Disponível em: &nbsp;
-              {
-                provaider.results?.BR?.flatrate
-                  ?.map((item: any, index: number) => (
-                    <span className="text-white" key={index}>
-                      {item.provider_name.split(' ')[0]}
+            {
+              provaider.results?.BR?.flatrate
+                ?.map((item: any, index: number) => (
+                  <p className="text-center mt-2 text-zinc-400" key={index}>
+                    Disponível em: &nbsp;
+                    <span className="text-white">
+                      <img
+                        src={
+                          'https://media.themoviedb.org/t/p/original/' +
+                          item.logo_path
+                        }
+                        alt={item.provider_name}
+                        className="w-10 h-10 inline-block mr-1 rounded-lg"
+                      />
                     </span>
-                  ))
-                  .filter(
-                    (value: any, index: any, self: string | any[]) =>
-                      self.indexOf(value) === index,
-                  )[0]
-              }
-            </p>
+                  </p>
+                ))
+                .filter(
+                  (value: any, index: any, self: string | any[]) =>
+                    self.indexOf(value) === index,
+                )[0]
+            }
           </div>
           <div className="md:w-2/3 md:pl-6 mt-4 md:mt-0">
             <h2 className="text-3xl font-bold mb-2">
@@ -150,8 +159,11 @@ export function ComponentPage() {
             </h2>
             <p className="inline bg-gray-900 rounded-lg p-1">
               {movie?.release_date
-                ? new Date(movie.release_date).toLocaleDateString('pt-BR')
-                : 'Data de Lançamento Indisponível'}{' '}
+                ? format(new Date(movie.release_date), 'dd MMM yyyy', {
+                    locale: ptBR,
+                  })
+                : 'Data de Lançamento Indisponível'}
+              {', '}
               {movie?.genres.map((genre) => `${genre.name} `)}
             </p>
             <div className="flex items-center my-4">
@@ -254,10 +266,12 @@ export function ComponentPage() {
                 <strong>Director:</strong>{' '}
                 {principalCast[2]?.members.join(', ')}
               </p>
-              <p>
-                <strong>Screenplay, Story:</strong>{' '}
-                {principalCast[0]?.members.join(', ')}{' '}
-              </p>
+              {principalCast[0]?.members.length > 0 && (
+                <p>
+                  <strong>Roteiro, História:</strong>{' '}
+                  {principalCast[0]?.members.join(', ')}{' '}
+                </p>
+              )}
             </div>
           </div>
         </div>
