@@ -1,14 +1,26 @@
+'use client'
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useForm } from 'react-hook-form'
 
 export function ComponentPage() {
+  const form = useForm()
+  const handleSubmit = form.handleSubmit(async (data) => {
+    const bodyRaw = JSON.stringify({
+      username: data.username,
+      password: data.password,
+    })
+    alert(bodyRaw)
+    // Enviar bodyRaw para a API aqui
+  })
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-100 dark:bg-zinc-900">
       <div className="max-w-md w-full bg-white dark:bg-zinc-800 p-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 text-center">
           Login
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="username"
@@ -16,7 +28,12 @@ export function ComponentPage() {
             >
               Username
             </label>
-            <Input type="username" id="username" required />
+            <Input
+              type="username"
+              id="username"
+              {...form.register('username')}
+              required
+            />
           </div>
           <div className="mb-6">
             <label
@@ -25,22 +42,14 @@ export function ComponentPage() {
             >
               Password
             </label>
-            <Input type="password" id="password" required />
+            <Input
+              type="password"
+              id="password"
+              {...form.register('password')}
+              required
+            />
           </div>
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="remember"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-zinc-300 rounded"
-              />
-              <label
-                htmlFor="remember"
-                className="ml-2 block text-zinc-900 dark:text-zinc-300"
-              >
-                Remember me
-              </label>
-            </div>
             <a
               href="#"
               className="text-sm text-blue-600 hover:underline dark:text-blue-400"
@@ -48,8 +57,12 @@ export function ComponentPage() {
               Forgot password?
             </a>
           </div>
-          <Button type="submit" className="w-full">
-            Login
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? 'Sending...' : 'Login'}
           </Button>
         </form>
         <p className="mt-6 text-center text-zinc-600 dark:text-zinc-400">
