@@ -146,12 +146,26 @@ export function ComponentPage() {
               <span className="bg-green-500 text-white text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-700 dark:text-green-200">
                 {tv?.vote_average.toFixed(1)}% Geral dos Utilizadores
               </span>
-              <span className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full mr-2">
-                👍
-              </span>
-              <span className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-full">
-                😐
-              </span>
+              {Math.round(tv?.vote_average ?? 0) > 0 &&
+              Math.round(tv?.vote_average ?? 0) >= 7 ? (
+                <>
+                  <span className="text-sm bg-green-500 text-white px-3 py-1 rounded-full mr-2">
+                    😄
+                  </span>
+                  <span className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full mr-2">
+                    ❤️
+                  </span>
+                </>
+              ) : Math.round(tv?.vote_average ?? 0) > 0 ? (
+                <>
+                  <span className="text-sm bg-green-500 text-white px-3 py-1 rounded-full">
+                    👍
+                  </span>
+                  <span className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-full">
+                    😐
+                  </span>
+                </>
+              ) : null}
             </div>
             <div className="flex items-center mb-4">
               <button

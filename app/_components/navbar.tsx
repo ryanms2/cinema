@@ -4,52 +4,52 @@
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from '@/components/ui/dropdown-menu'
+// import {
+//   DropdownMenuTrigger,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuItem,
+//   DropdownMenuContent,
+//   DropdownMenu,
+// } from '@/components/ui/dropdown-menu'
 import { SheetTrigger, SheetContent, Sheet } from '@/components/ui/sheet'
 import {
   CollapsibleTrigger,
   CollapsibleContent,
   Collapsible,
 } from '@/components/ui/collapsible'
-import { JSX, SVGProps, useState, useEffect } from 'react'
+import { JSX, SVGProps, useState } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
-import { requestToken } from '@/lib/auth'
+// import { requestToken } from '@/lib/auth'
 
-function getCookie(name: string) {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift()
-}
+// function getCookie(name: string) {
+//   const value = `; ${document.cookie}`
+//   const parts = value.split(`; ${name}=`)
+//   if (parts.length === 2) return parts.pop()?.split(';').shift()
+// }
 
 export function Navbar() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
   const [search, setSearch] = useState<string | null>(null)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  useEffect(() => {
-    const token = getCookie('request_token')
-    if (token) {
-      setIsLoggedIn(true)
-    } else {
-      setIsLoggedIn(false)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const token = getCookie('request_token')
+  //   if (token) {
+  //     setIsLoggedIn(true)
+  //   } else {
+  //     setIsLoggedIn(false)
+  //   }
+  // }, [])
 
-  const createToken = async () => {
-    const token = await requestToken()
-    const url = `https://www.themoviedb.org/authenticate/${token.request_token}?redirect_to=http://localhost:3000/approved`
-    window.location.href = url
-  }
+  // const createToken = async () => {
+  //   const token = await requestToken()
+  //   const url = `https://www.themoviedb.org/authenticate/${token.request_token}?redirect_to=http://localhost:3000/approved`
+  //   window.location.href = url
+  // }
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams)
@@ -187,7 +187,7 @@ export function Navbar() {
           />
           <SearchIcon className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500" />
         </div>
-        {isLoggedIn ? (
+        {/* {isLoggedIn ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -247,7 +247,7 @@ export function Navbar() {
               <DropdownMenuItem onClick={createToken}>Login</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )}
+        )} */}
       </div>
       <Sheet>
         <SheetTrigger asChild>

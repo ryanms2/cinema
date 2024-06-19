@@ -13,6 +13,7 @@ import { Recomendations } from './recomendations'
 import { MainCast } from './mainCast'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { toast } from '@/components/ui/use-toast'
 
 interface Movie {
   poster_path: string
@@ -170,17 +171,37 @@ export function ComponentPage() {
               <span className="bg-green-500 text-white text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-700 dark:text-green-200">
                 {movie?.vote_average.toFixed(1)}% Geral dos Utilizadores
               </span>
-              <span className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full mr-2">
-                👍
-              </span>
-              <span className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-full">
-                😐
-              </span>
+              {Math.round(movie?.vote_average ?? 0) > 0 &&
+              Math.round(movie?.vote_average ?? 0) >= 7 ? (
+                <>
+                  <span className="text-sm bg-green-500 text-white px-3 py-1 rounded-full mr-2">
+                    😄
+                  </span>
+                  <span className="text-sm bg-blue-500 text-white px-3 py-1 rounded-full mr-2">
+                    ❤️
+                  </span>
+                </>
+              ) : Math.round(movie?.vote_average ?? 0) > 0 ? (
+                <>
+                  <span className="text-sm bg-green-500 text-white px-3 py-1 rounded-full">
+                    👍
+                  </span>
+                  <span className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-full">
+                    😐
+                  </span>
+                </>
+              ) : null}
             </div>
             <div className="flex items-center mb-4">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l"
-                onClick={() => openVideoOverlay()}
+                onClick={() =>
+                  !trailerKey.results[0]?.key
+                    ? toast({
+                        title: 'Trailer Indisponível',
+                      })
+                    : openVideoOverlay()
+                }
               >
                 <i className="fas fa-play"></i> Ver Trailer
               </button>
