@@ -1,4 +1,4 @@
-import { ComponentPage } from './_component/component_page'
+import { ComponentPage } from './_components/component_page'
 
 export default function Page() {
   return <ComponentPage />
