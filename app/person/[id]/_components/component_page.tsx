@@ -2,7 +2,12 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { fetchDetails, fetchMovieCredits } from '@/lib/dataPersonDetails'
+import { Button } from '@/components/ui/button'
+import {
+  fetchDetails,
+  fetchExternalIds,
+  fetchMovieCredits,
+} from '@/lib/dataPersonDetails'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
@@ -18,6 +23,7 @@ interface Person {
   birthday: string
   also_known_as: string[]
   biography: string
+  homepage: string
 }
 
 export function ComponentPage() {
@@ -26,12 +32,17 @@ export function ComponentPage() {
   const [person, setPerson] = useState<Person | null>(null)
   const [movieCredits, setMovieCredits] = useState<any | null>(null)
   const [allMovieCredits, setAllMovieCredits] = useState<any | null>(null)
+  const [externalIds, setExternalIds] = useState<any | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      const [details] = await Promise.all([fetchDetails(id || '')])
+      const [details, externalIds] = await Promise.all([
+        fetchDetails(id || ''),
+        fetchExternalIds(id || ''),
+      ])
 
       setPerson(details)
+      setExternalIds(externalIds)
     }
 
     if (params.id) {
@@ -74,42 +85,78 @@ export function ComponentPage() {
             height={450}
           />
           <div className="mt-4 flex justify-between space-x-2">
-            <a href="#" className="text-zinc-600 dark:text-zinc-300">
-              <img
-                aria-hidden="true"
-                alt="facebook"
-                src="https://img.icons8.com/?size=100&id=9foSA61V9037&format=png&color=000000"
-                width={20}
-                height={15}
-              />
-            </a>
-            <a href="#" className="text-zinc-600 dark:text-zinc-300">
-              <img
-                aria-hidden="true"
-                alt="X"
-                src="https://img.icons8.com/?size=100&id=fJp7hepMryiw&format=png&color=000000"
-                width={20}
-                height={15}
-              />
-            </a>
-            <a href="#" className="text-zinc-600 dark:text-zinc-300">
-              <img
-                aria-hidden="true"
-                alt="instagram"
-                src="https://img.icons8.com/?size=100&id=wrwXlOVAFfeY&format=png&color=000000"
-                width={20}
-                height={15}
-              />
-            </a>
-            <a href="#" className="text-zinc-600 dark:text-zinc-300">
-              <img
-                aria-hidden="true"
-                alt="link para o site"
-                src="https://img.icons8.com/?size=100&id=92&format=png&color=000000"
-                width={20}
-                height={15}
-              />
-            </a>
+            {externalIds?.facebook_id && (
+              <Button className="bg-transparent">
+                <a
+                  href={'https://www.facebook.com/' + externalIds?.facebook_id}
+                  target="_blank"
+                  className="text-zinc-600 dark:text-zinc-300"
+                >
+                  <img
+                    aria-hidden="true"
+                    alt="facebook"
+                    src="https://img.icons8.com/?size=100&id=9foSA61V9037&format=png&color=000000"
+                    width={20}
+                    height={15}
+                  />
+                </a>
+              </Button>
+            )}
+            {externalIds?.instagram_id && (
+              <Button className="bg-transparent">
+                <a
+                  href={
+                    'https://www.instagram.com/' + externalIds?.instagram_id
+                  }
+                  className="text-zinc-600 dark:text-zinc-300"
+                  target="_blank"
+                >
+                  <img
+                    aria-hidden="true"
+                    alt="instagram"
+                    src="https://img.icons8.com/?size=100&id=wrwXlOVAFfeY&format=png&color=000000"
+                    width={20}
+                    height={15}
+                  />
+                </a>
+              </Button>
+            )}
+
+            {externalIds?.twitter_id && (
+              <Button className="bg-transparent">
+                <a
+                  href={'https://x.com/' + externalIds?.twitter_id}
+                  className="text-zinc-600 dark:text-zinc-300"
+                  target="_blank"
+                >
+                  <img
+                    aria-hidden="true"
+                    alt="X"
+                    src="https://img.icons8.com/?size=100&id=fJp7hepMryiw&format=png&color=000000"
+                    width={20}
+                    height={15}
+                  />
+                </a>
+              </Button>
+            )}
+
+            {person?.homepage && (
+              <Button className="bg-transparent">
+                <a
+                  href={person?.homepage}
+                  className="text-zinc-600 dark:text-zinc-300"
+                  target="_blank"
+                >
+                  <img
+                    aria-hidden="true"
+                    alt="link para o site"
+                    src="https://img.icons8.com/?size=100&id=92&format=png&color=000000"
+                    width={20}
+                    height={15}
+                  />
+                </a>
+              </Button>
+            )}
           </div>
           <div className="mt-4">
             <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">

@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import { fetchPopularPerson } from '@/lib/data'
 import { useEffect, useState } from 'react'
 import Pagination from './pagination'
+import Link from 'next/link'
 
 export function ComponentPage({
   searchParams,
@@ -33,48 +34,50 @@ export function ComponentPage({
         <div className="flex flex-col md:flex-row gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {totalPages?.results?.map((result: any, index: number) => (
-              <Card key={index} className="mb-4">
-                <div className="gap-4">
-                  <img
-                    alt={
-                      result.title ||
-                      result.original_title ||
-                      result.name ||
-                      result.original_name
-                    }
-                    className="w-100% h-100% object-cover rounded"
-                    height="100%"
-                    src={`https://image.tmdb.org/t/p/w500${result.poster_path || result.profile_path}`}
-                    style={{
-                      aspectRatio: '90/120',
-                      objectFit: 'cover',
-                    }}
-                    width="100%"
-                  />
-                  <div className="p-2">
-                    <h3 className="text-xl font-bold text-center">
-                      {result.title ||
+              <Link key={index} href={`/person/${result.id}`}>
+                <Card className="mb-4 cursor-pointer">
+                  <div className="gap-4">
+                    <img
+                      alt={
+                        result.title ||
                         result.original_title ||
                         result.name ||
-                        result.original_name}
-                    </h3>
-                    <p className="text-gray-700">
-                      {result.known_for.map(
-                        (participate: any, index: number) => (
-                          <p key={index}>{participate.title}</p>
-                        ),
-                      )}
-                    </p>
-                    <p className="text-gray-700">
-                      {result.known_for.map(
-                        (participate: any, index: number) => (
-                          <p key={index}>{participate.name}</p>
-                        ),
-                      )}
-                    </p>
+                        result.original_name
+                      }
+                      className="w-100% h-100% object-cover rounded"
+                      height="100%"
+                      src={`https://image.tmdb.org/t/p/w500${result.poster_path || result.profile_path}`}
+                      style={{
+                        aspectRatio: '90/120',
+                        objectFit: 'cover',
+                      }}
+                      width="100%"
+                    />
+                    <div className="p-2">
+                      <h3 className="text-xl font-bold text-center hover:text-gray-800">
+                        {result.title ||
+                          result.original_title ||
+                          result.name ||
+                          result.original_name}
+                      </h3>
+                      <p className="text-gray-700">
+                        {result.known_for.map(
+                          (participate: any, index: number) => (
+                            <p key={index}>{participate.title}</p>
+                          ),
+                        )}
+                      </p>
+                      <p className="text-gray-700">
+                        {result.known_for.map(
+                          (participate: any, index: number) => (
+                            <p key={index}>{participate.name}</p>
+                          ),
+                        )}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
