@@ -2,51 +2,15 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { Button } from '@/components/ui/button'
-import axios from 'axios'
+import { fetchNowPlayingMovies } from '@/lib/data'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-export function NowPlaying() {
+export async function NowPlaying() {
   const [tipo, setTipo] = useState('streaming')
   const [movies, setMovies] = useState([])
-
-  const fetchMovies = async (tipo: any) => {
-    let url
-    if (tipo === 'cinema') {
-      url = 'https://api.themoviedb.org/3/movie/upcoming?language=pt-br&page=1'
-    }
-
-    if (tipo === 'streaming') {
-      url = 'https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1'
-    }
-
-    if (tipo === 'naTv') {
-      url =
-        'https://api.themoviedb.org/3/movie/now_playing?language=pt-br&page=1'
-    }
-
-    if (tipo === 'alugar') {
-      url = 'https://api.themoviedb.org/3/movie/top_rated?language=pt-br&page=1'
-    }
-
-    const options = {
-      method: 'GET',
-      url,
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
-      },
-    }
-
-    try {
-      const response = await axios.request(options)
-      return response.data
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   const shuffleMovies = (moviesArray: any) => {
     for (let i = moviesArray.length - 1; i > 0; i--) {
@@ -57,10 +21,16 @@ export function NowPlaying() {
   }
 
   useEffect(() => {
-    fetchMovies(tipo).then((res: any) => {
-      const shuffledMovies = shuffleMovies(res.results)
-      setMovies(shuffledMovies)
-    })
+    const fetchData = async () => {
+      await fetchNowPlayingMovies(tipo).then((res: any) => {
+        const shuffledMovies = shuffleMovies(res.results)
+        setMovies(shuffledMovies)
+      })
+    }
+
+    if (tipo) {
+      fetchData()
+    }
   }, [tipo])
 
   return (

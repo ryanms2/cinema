@@ -2,42 +2,15 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { Button } from '@/components/ui/button'
-import axios from 'axios'
+import { fetchTrendingMovies } from '@/lib/data'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-export function Trending() {
+export async function Trending() {
   const [tipo, setTipo] = useState('day')
   const [movies, setMovies] = useState([])
-
-  const fetchMovies = async (tipo: any) => {
-    let url
-    if (tipo === 'day') {
-      url = 'https://api.themoviedb.org/3/trending/movie/day?language=pt-br'
-    }
-
-    if (tipo === 'week') {
-      url = 'https://api.themoviedb.org/3/trending/movie/week?language=pt-br'
-    }
-
-    const options = {
-      method: 'GET',
-      url,
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
-      },
-    }
-
-    try {
-      const response = await axios.request(options)
-      return response.data
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   const shuffleMovies = (moviesArray: any) => {
     for (let i = moviesArray.length - 1; i > 0; i--) {
@@ -48,10 +21,15 @@ export function Trending() {
   }
 
   useEffect(() => {
-    fetchMovies(tipo).then((res: any) => {
-      const shuffledMovies = shuffleMovies(res.results)
-      setMovies(shuffledMovies)
-    })
+    const fetchData = async () => {
+      await fetchTrendingMovies(tipo).then((res: any) => {
+        const shuffledMovies = shuffleMovies(res.results)
+        setMovies(shuffledMovies)
+      })
+    }
+    if (tipo) {
+      fetchData()
+    }
   }, [tipo])
 
   return (

@@ -128,6 +128,70 @@ export async function fetchPersonAmount(query: string) {
   }
 }
 
+export async function fetchTrendingMovies(tipo: string) {
+  noStore()
+  let url
+  if (tipo === 'day') {
+    url = 'https://api.themoviedb.org/3/trending/movie/day?language=pt-br'
+  }
+
+  if (tipo === 'week') {
+    url = 'https://api.themoviedb.org/3/trending/movie/week?language=pt-br'
+  }
+
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchNowPlayingMovies(tipo: string) {
+  noStore()
+  let url
+  if (tipo === 'cinema') {
+    url = 'https://api.themoviedb.org/3/movie/upcoming?language=pt-br&page=1'
+  }
+
+  if (tipo === 'streaming') {
+    url = 'https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1'
+  }
+
+  if (tipo === 'naTv') {
+    url = 'https://api.themoviedb.org/3/movie/now_playing?language=pt-br&page=1'
+  }
+
+  if (tipo === 'alugar') {
+    url = 'https://api.themoviedb.org/3/movie/top_rated?language=pt-br&page=1'
+  }
+
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export async function fetchPopularMovies(query?: string | null) {
   noStore()
   let url = `https://api.themoviedb.org/3/movie/popular?${query}language=pt-br&page=1`

@@ -2,32 +2,25 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { Button } from '@/components/ui/button'
-import { CardHeader, Card } from '@/components/ui/card'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 export function Trailers() {
   const [tipo, setTipo] = useState('streaming')
-  const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState<any[]>([])
 
-  const fetchMovies = async (tipo: any) => {
-    let url
-    if (tipo === 'cinema') {
-      url = 'https://api.themoviedb.org/3/movie/upcoming?language=pt-br&page=1'
+  const fetchMovies = async (tipo: string) => {
+    const urls: { [key: string]: string } = {
+      cinema:
+        'https://api.themoviedb.org/3/movie/upcoming?language=pt-br&page=1',
+      streaming:
+        'https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1',
+      naTv: 'https://api.themoviedb.org/3/movie/now_playing?language=pt-br&page=1',
+      alugar:
+        'https://api.themoviedb.org/3/movie/top_rated?language=pt-br&page=1',
     }
 
-    if (tipo === 'streaming') {
-      url = 'https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1'
-    }
-
-    if (tipo === 'naTv') {
-      url =
-        'https://api.themoviedb.org/3/movie/now_playing?language=pt-br&page=1'
-    }
-
-    if (tipo === 'alugar') {
-      url = 'https://api.themoviedb.org/3/movie/top_rated?language=pt-br&page=1'
-    }
+    const url = urls[tipo]
 
     const options = {
       method: 'GET',
@@ -46,7 +39,26 @@ export function Trailers() {
     }
   }
 
-  const shuffleMovies = (moviesArray: any) => {
+  const fetchTrailers = async (movieId: number) => {
+    const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=pt-br`
+    const options = {
+      method: 'GET',
+      url,
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+      },
+    }
+
+    try {
+      const response = await axios.request(options)
+      return response.data.results
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const shuffleMovies = (moviesArray: any[]) => {
     for (let i = moviesArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[moviesArray[i], moviesArray[j]] = [moviesArray[j], moviesArray[i]]
@@ -55,143 +67,142 @@ export function Trailers() {
   }
 
   useEffect(() => {
-    fetchMovies(tipo).then((res: any) => {
+    fetchMovies(tipo).then(async (res: any) => {
       const shuffledMovies = shuffleMovies(res.results)
-      setMovies(shuffledMovies)
+      const moviesWithTrailers = await Promise.all(
+        shuffledMovies.map(async (movie: any) => {
+          const trailers = await fetchTrailers(movie.id)
+          return { ...movie, trailers: trailers.slice(0, 1) }
+        }),
+      )
+      setMovies(
+        moviesWithTrailers.filter((movie: any) => movie.trailers.length > 0),
+      )
     })
   }, [tipo])
+
+  const handleBackgroundImage = (element: HTMLElement | null, movie: any) => {
+    if (element) {
+      element.style.backgroundImage = movie.backdrop_path
+        ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
+        : ''
+      element.style.backgroundSize = 'cover'
+      element.style.filter = 'brightness(90%)'
+      element.style.transition = 'background-image 0.5s'
+    }
+  }
+
+  const handleModal = (trailerKey: string) => {
+    const modal = document.createElement('div')
+    modal.style.position = 'fixed'
+    modal.style.top = '0'
+    modal.style.left = '0'
+    modal.style.width = '100%'
+    modal.style.height = '100%'
+    modal.style.backgroundColor = 'rgba(0,0,0,0.5)'
+    modal.style.display = 'flex'
+    modal.style.justifyContent = 'center'
+    modal.style.alignItems = 'center'
+    modal.style.zIndex = '1000'
+
+    const videoPlayer = document.createElement('iframe')
+    videoPlayer.src = `https://www.youtube.com/embed/${trailerKey}`
+    videoPlayer.width = '80%'
+    videoPlayer.height = '80%'
+    videoPlayer.style.border = 'none'
+
+    const closeButton = document.createElement('button')
+    closeButton.innerText = 'Fechar'
+    closeButton.style.position = 'absolute'
+    closeButton.style.top = '20px'
+    closeButton.style.right = '20px'
+    closeButton.style.zIndex = '1001'
+    closeButton.style.padding = '10px'
+    closeButton.style.borderRadius = '5px'
+    closeButton.style.border = 'none'
+    closeButton.style.backgroundColor = '#ff0000'
+    closeButton.style.color = 'white'
+    closeButton.onclick = function () {
+      document.body.removeChild(modal)
+    }
+
+    modal.appendChild(videoPlayer)
+    modal.appendChild(closeButton)
+    document.body.appendChild(modal)
+  }
 
   return (
     <div className="bg-white p-6">
       <div className="flex flex-col space-y-4">
-        <h2 className="text-xl font-bold">Os Mais Populares</h2>
+        <h2 className="text-xl font-bold">Últimos trailers</h2>
         <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 lg:space-x-2">
           <div className="flex space-x-2">
-            <Button
-              className={`${tipo === 'streaming' ? 'bg-blue-600' : 'bg-gray-200'} text-white`}
-              onClick={() => {
-                setTipo('streaming')
-              }}
-            >
-              Streaming
-            </Button>
-            <Button
-              className={`${tipo === 'naTv' ? 'bg-blue-600' : 'bg-gray-200'} text-white`}
-              onClick={() => {
-                setTipo('naTv')
-              }}
-            >
-              Na TV
-            </Button>
-            <Button
-              className={`${tipo === 'alugar' ? 'bg-blue-600' : 'bg-gray-200'} text-white`}
-              onClick={() => {
-                setTipo('alugar')
-              }}
-            >
-              Para Alugar
-            </Button>
-            <Button
-              className={`${tipo === 'cinema' ? 'bg-blue-600' : 'bg-gray-200'} text-white`}
-              onClick={() => {
-                setTipo('cinema')
-              }}
-            >
-              Nos Cinemas
-            </Button>
+            {['streaming', 'naTv', 'alugar', 'cinema'].map((type) => (
+              <Button
+                key={type}
+                className={`${
+                  tipo === type ? 'bg-blue-600' : 'bg-gray-200'
+                } text-white`}
+                onClick={() => setTipo(type)}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </Button>
+            ))}
           </div>
         </div>
       </div>
-      <div className="flex overflow-x-auto w-full max-w-2xl mt-4 space-x-4 md:space-x-6 lg:max-w-none lg:overflow-visible lg:space-x-8">
+      <div
+        className="flex p-3 rounded-sm overflow-x-auto w-full h-full mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8 bg-zinc-900"
+        style={{
+          backgroundImage: movies[movies.length - 1]?.backdrop_path
+            ? `url(https://image.tmdb.org/t/p/original${movies[movies.length - 1].backdrop_path})`
+            : '',
+          backgroundSize: 'cover',
+          filter: 'brightness(90%)',
+          transition: 'background-image 0.5s',
+        }}
+        onMouseLeave={(e) =>
+          handleBackgroundImage(e.currentTarget, movies[movies.length - 1])
+        }
+        onClick={() => handleModal(movies[movies.length - 1].trailers[0].key)}
+      >
         {movies.map((movie: any, index: number) => (
-          <Card className="w-[140px]" key={index}>
+          <div
+            className="relative group w-52 h-54 mb-4 flex-shrink-0"
+            key={index}
+            onMouseEnter={(e) =>
+              handleBackgroundImage(e.currentTarget.parentElement, movie)
+            }
+          >
             <img
-              alt={movie.title}
-              className="rounded-t-lg"
-              height="210"
+              className="relative inset-0 w-full h-full object-cover rounded-lg group-hover:blur-sm"
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              style={{
-                aspectRatio: '140/210',
-                objectFit: 'cover',
-              }}
-              width="140"
+              alt={movie.title}
             />
-            <CardHeader>
-              <div>
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => {
-                    const modal = document.createElement('div')
-                    modal.style.position = 'fixed'
-                    modal.style.top = '0'
-                    modal.style.left = '0'
-                    modal.style.width = '100%'
-                    modal.style.height = '100%'
-                    modal.style.backgroundColor = 'rgba(0,0,0,0.5)'
-                    modal.style.display = 'flex'
-                    modal.style.justifyContent = 'center'
-                    modal.style.alignItems = 'center'
-                    modal.style.zIndex = '1000'
-
-                    const videoPlayer = document.createElement('video')
-                    videoPlayer.src = `https://www.youtube.com/${movie.video_path}`
-                    videoPlayer.controls = true
-                    videoPlayer.autoplay = true
-                    videoPlayer.style.maxWidth = '80%'
-                    videoPlayer.style.maxHeight = '80%'
-
-                    const closeButton = document.createElement('button')
-                    closeButton.innerText = 'Fechar'
-                    closeButton.style.position = 'absolute'
-                    closeButton.style.top = '20px'
-                    closeButton.style.right = '20px'
-                    closeButton.style.zIndex = '1001'
-                    closeButton.style.padding = '10px'
-                    closeButton.style.borderRadius = '5px'
-                    closeButton.style.border = 'none'
-                    closeButton.style.backgroundColor = '#ff0000'
-                    closeButton.style.color = 'white'
-                    closeButton.onclick = function () {
-                      document.body.removeChild(modal)
-                    }
-
-                    modal.appendChild(videoPlayer)
-                    modal.appendChild(closeButton)
-                    document.body.appendChild(modal)
-                  }}
+            <div className="absolute inset-0 w-full h-full bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
+              <button className="bg-white p-1 rounded-full w-10 h-10">
+                <img
+                  aria-hidden="true"
+                  alt="play"
+                  src="https://img.icons8.com/?size=100&id=47815&format=png&color=000000"
+                />
+              </button>
+            </div>
+            <div className="absolute bottom-0 left-0 p-4 text-white">
+              <h3 className="text-lg font-bold">{movie.title}</h3>
+              {movie.trailers.map((trailer: any, trailerIndex: number) => (
+                <p
+                  key={trailerIndex}
+                  className="text-sm cursor-pointer"
+                  onClick={() => handleModal(trailer.key)}
                 >
-                  Assistir Trailer
-                </button>
-              </div>
-              <div className="flex justify-between items-center mt-2">
-                <h5 className="text-sm font-bold">{movie.title}</h5>
-                <MoreVerticalIcon className="text-gray-500" />
-              </div>
-            </CardHeader>
-          </Card>
+                  {trailer.name}
+                </p>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
-  )
-}
-
-function MoreVerticalIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="12" cy="5" r="1" />
-      <circle cx="12" cy="19" r="1" />
-    </svg>
   )
 }

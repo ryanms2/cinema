@@ -21,6 +21,7 @@ import {
 } from '@radix-ui/react-popover'
 import { format } from 'date-fns'
 import * as React from 'react'
+import { MoviePageSkeleton } from '@/app/ui/skeletons'
 
 export default function ComponentPage() {
   const [primaryDateLast, setPrimaryDateLast] = useState<string | null>(null)
@@ -291,14 +292,16 @@ export default function ComponentPage() {
             </div>
           </div>
           <div className="order-2 md:order-2 flex-1">
-            <ListFilms
-              inputDateLast={primaryDateLast}
-              inputPrimaryDateFirst={primaryDateFirst}
-              selectGenres={genres}
-              inputRange={inputRange}
-              inputOrder={inputOrder}
-              changeGenre={changeGenres}
-            />
+            <React.Suspense fallback={<MoviePageSkeleton />}>
+              <ListFilms
+                inputDateLast={primaryDateLast}
+                inputPrimaryDateFirst={primaryDateFirst}
+                selectGenres={genres}
+                inputRange={inputRange}
+                inputOrder={inputOrder}
+                changeGenre={changeGenres}
+              />
+            </React.Suspense>
           </div>
         </div>
       </div>

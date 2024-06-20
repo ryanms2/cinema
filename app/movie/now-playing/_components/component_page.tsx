@@ -21,8 +21,9 @@ import {
 } from '@radix-ui/react-popover'
 import { subMonths, startOfMonth, format, addMonths } from 'date-fns'
 import * as React from 'react'
+import { MoviePageSkeleton } from '@/app/ui/skeletons'
 
-export default function ComponentPage() {
+export function ComponentPage() {
   const currentDateLast = new Date()
   const nextMonth = addMonths(currentDateLast, 1)
   const formattedDateLast = format(startOfMonth(nextMonth), 'yyyy-MM-dd')
@@ -298,14 +299,16 @@ export default function ComponentPage() {
             </div>
           </div>
           <div className="order-2 md:order-2 flex-1">
-            <ListFilms
-              inputDateLast={primaryDateLast}
-              inputPrimaryDateFirst={primaryDateFirst}
-              selectGenres={genres}
-              inputRange={inputRange}
-              inputOrder={inputOrder}
-              changeGenre={changeGenres}
-            />
+            <React.Suspense fallback={<MoviePageSkeleton />}>
+              <ListFilms
+                inputDateLast={primaryDateLast}
+                inputPrimaryDateFirst={primaryDateFirst}
+                selectGenres={genres}
+                inputRange={inputRange}
+                inputOrder={inputOrder}
+                changeGenre={changeGenres}
+              />
+            </React.Suspense>
           </div>
         </div>
       </div>

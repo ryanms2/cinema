@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import { ComponentPage } from './_components/component_page'
+import { MoviePageSkeleton } from '../ui/skeletons'
 
 export default function Page({
   searchParams,
@@ -8,5 +10,9 @@ export default function Page({
     page?: string
   }
 }) {
-  return <ComponentPage searchParams={searchParams} />
+  return (
+    <Suspense fallback={<MoviePageSkeleton />}>
+      <ComponentPage searchParams={searchParams} />
+    </Suspense>
+  )
 }

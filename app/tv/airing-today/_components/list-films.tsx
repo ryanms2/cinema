@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-export function ListFilms({
+export async function ListFilms({
   inputDateLast,
   inputPrimaryDateFirst,
   selectGenres,

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import Pagination from './pagination'
 import Link from 'next/link'
 
-export function ComponentPage({
+export async function ComponentPage({
   searchParams,
 }: {
   searchParams?: {
