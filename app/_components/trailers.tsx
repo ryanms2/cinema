@@ -164,7 +164,6 @@ export function Trailers() {
         onMouseLeave={(e) =>
           handleBackgroundImage(e.currentTarget, movies[movies.length - 1])
         }
-        onClick={() => handleModal(movies[movies.length - 1].trailers[0].key)}
       >
         {movies.map((movie: any, index: number) => (
           <div
@@ -180,7 +179,10 @@ export function Trailers() {
               alt={movie.title}
             />
             <div className="absolute inset-0 w-full h-full bg-black bg-opacity-50 rounded-lg flex items-center justify-center">
-              <button className="bg-white p-1 rounded-full w-10 h-10">
+              <button
+                className="bg-white p-1 rounded-full w-10 h-10"
+                onClick={() => handleModal(movie.trailers[0].key)}
+              >
                 <img
                   aria-hidden="true"
                   alt="play"
