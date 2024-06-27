@@ -35,14 +35,14 @@ export function Welcome() {
           </Link>
         </div>
       </div>
-      <div className="bg-[#2E4055] py-4">
+      {/* <div className="bg-[#2E4055] py-4">
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <h2 className="text-2xl font-semibold text-white">OSCARS</h2>
           <button className="bg-transparent border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-[#1F2937] transition-colors">
             View the winners
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
