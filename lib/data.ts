@@ -270,6 +270,56 @@ export async function fetchMoviesNowPlayingFilter(
   }
 }
 
+export async function fetchTrailerMovies(tipo: string) {
+  noStore()
+  const urls: { [key: string]: string } = {
+    cinema: 'https://api.themoviedb.org/3/movie/upcoming?language=pt-br&page=1',
+    streaming:
+      'https://api.themoviedb.org/3/movie/popular?language=pt-br&page=1',
+    naTv: 'https://api.themoviedb.org/3/movie/now_playing?language=pt-br&page=1',
+    alugar:
+      'https://api.themoviedb.org/3/movie/top_rated?language=pt-br&page=1',
+  }
+
+  const url = urls[tipo]
+
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+
+  try {
+    const response = await axios.request(options)
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function fetchVideoTrailersForId(movieId: number) {
+  noStore()
+  const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=pt-br`
+  const options = {
+    method: 'GET',
+    url,
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_TOKEN,
+    },
+  }
+
+  try {
+    const response = await axios.request(options)
+    return response.data.results
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export async function fetchMoviesUpcomingFilter(
   primaryFirstDate?: string,
   primaryLastDate?: string | null,

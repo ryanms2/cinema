@@ -12,7 +12,6 @@ export default function Home() {
       <Suspense fallback={<HomePageSkeletonMovie />}>
         <Trending />
       </Suspense>
-
       <Trailers />
 
       <Suspense fallback={<HomePageSkeletonMovie />}>
