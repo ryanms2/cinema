@@ -102,7 +102,6 @@ export function ComponentPage() {
     `
     document.body.appendChild(overlay)
   }
-  console.log(movie)
   function openInfoOverlay() {
     setShowInfo(true)
   }

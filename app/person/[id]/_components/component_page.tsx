@@ -30,7 +30,7 @@ export function ComponentPage() {
   const params = useParams()
   const id = String(params.id)
   const [person, setPerson] = useState<Person | null>(null)
-  const [movieCredits, setMovieCredits] = useState<any | null>(null)
+  // const [movieCredits, setMovieCredits] = useState<any | null>(null)
   const [allMovieCredits, setAllMovieCredits] = useState<any | null>(null)
   const [externalIds, setExternalIds] = useState<any | null>(null)
 
@@ -49,18 +49,18 @@ export function ComponentPage() {
       fetchData()
     }
   }, [id, params.id])
-  useEffect(() => {
-    const fetchData = async () => {
-      const movieCreditsResponse = await fetchMovieCredits(id || '')
-      const filteredCredits = movieCreditsResponse.cast.filter(
-        (credit: any) => credit.order === 1,
-      )
-      setMovieCredits(filteredCredits)
-    }
-    if (id) {
-      fetchData()
-    }
-  }, [id])
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const movieCreditsResponse = await fetchMovieCredits(id || '')
+  //     const filteredCredits = movieCreditsResponse.cast.filter(
+  //       (credit: any) => credit.order === 1,
+  //     )
+  //     setMovieCredits(filteredCredits)
+  //   }
+  //   if (id) {
+  //     fetchData()
+  //   }
+  // }, [id])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +72,6 @@ export function ComponentPage() {
       fetchData()
     }
   }, [id])
-  console.log(movieCredits)
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-col md:flex-row bg-white dark:bg-zinc-800 rounded-lg shadow-md overflow-hidden">
