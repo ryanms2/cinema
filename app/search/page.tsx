@@ -1,6 +1,6 @@
 import { ComponentPage } from './_components/component_page'
 
-export default async function Page({
+export default function Page({
   searchParams,
 }: {
   searchParams?: {

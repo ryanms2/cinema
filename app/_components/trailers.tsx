@@ -6,12 +6,31 @@ import { fetchTrailerMovies, fetchVideoTrailersForId } from '@/lib/data'
 import { useEffect, useState, useCallback } from 'react'
 import { HomePageSkeletonMovie } from '@/app/ui/skeletons'
 
-export function Trailers() {
-  const [tipo, setTipo] = useState('streaming')
-  const [movies, setMovies] = useState<any[]>([])
-  const [loading, setLoading] = useState(false)
+interface Trailer {
+  key: string
+  name: string
+}
 
-  const shuffleMovies = useCallback((moviesArray: any[]) => {
+interface Movie {
+  id: number
+  title: string
+  poster_path: string
+  backdrop_path: string
+  trailers: Trailer[]
+}
+
+export function Trailers() {
+  const [state, setState] = useState<{
+    tipo: string
+    movies: Movie[]
+    loading: boolean
+  }>({
+    tipo: 'streaming',
+    movies: [],
+    loading: false,
+  })
+
+  const shuffleMovies = useCallback((moviesArray: Movie[]) => {
     for (let i = moviesArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[moviesArray[i], moviesArray[j]] = [moviesArray[j], moviesArray[i]]
@@ -21,28 +40,29 @@ export function Trailers() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
-      const res = await fetchTrailerMovies(tipo)
+      setState((prevState) => ({ ...prevState, loading: true }))
+      const res = await fetchTrailerMovies(state.tipo)
       const shuffledMovies = shuffleMovies(res.results)
-      const moviesWithTrailers = await Promise.all(
-        shuffledMovies.map(async (movie: any) => {
+      const moviesWithTrailers: Movie[] = await Promise.all(
+        shuffledMovies.map(async (movie: Movie) => {
           const trailers = await fetchVideoTrailersForId(movie.id)
           return { ...movie, trailers: trailers.slice(0, 1) }
         }),
       )
-      setMovies(
-        moviesWithTrailers.filter((movie: any) => movie.trailers.length > 0),
-      )
-      setLoading(false)
+      setState({
+        tipo: state.tipo,
+        movies: moviesWithTrailers.filter((movie) => movie.trailers.length > 0),
+        loading: false,
+      })
     }
 
-    if (tipo) {
+    if (state.tipo) {
       fetchData()
     }
-  }, [tipo, shuffleMovies])
+  }, [state.tipo, shuffleMovies])
 
   const handleBackgroundImage = useCallback(
-    (element: HTMLElement | null, movie: any) => {
+    (element: HTMLElement | null, movie: Movie) => {
       if (element && movie && movie.backdrop_path) {
         element.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`
         element.style.backgroundSize = 'cover'
@@ -106,9 +126,11 @@ export function Trailers() {
               <Button
                 key={type}
                 className={`${
-                  tipo === type ? 'bg-blue-600' : 'bg-gray-200'
+                  state.tipo === type ? 'bg-blue-600' : 'bg-gray-200'
                 } text-white`}
-                onClick={() => setTipo(type)}
+                onClick={() =>
+                  setState((prevState) => ({ ...prevState, tipo: type }))
+                }
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </Button>
@@ -116,26 +138,28 @@ export function Trailers() {
           </div>
         </div>
       </div>
-      {loading ? (
-        <div className="flex p-3 rounded-sm overflow-x-auto w-full h-full mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8 bg-zinc-900">
-          <HomePageSkeletonMovie />
-        </div>
+      {state.loading ? (
+        <HomePageSkeletonMovie />
       ) : (
         <div
           className="flex p-3 rounded-sm overflow-x-auto w-full h-full mt-4 space-x-4 md:space-x-6 lg:max-w-none  lg:space-x-8 bg-zinc-900"
           style={{
-            backgroundImage: movies[movies.length - 1]?.backdrop_path
-              ? `url(https://image.tmdb.org/t/p/original${movies[movies.length - 1].backdrop_path})`
+            backgroundImage: state.movies[state.movies.length - 1]
+              ?.backdrop_path
+              ? `url(https://image.tmdb.org/t/p/original${state.movies[state.movies.length - 1]?.backdrop_path})`
               : '',
             backgroundSize: 'cover',
             filter: 'brightness(90%)',
             transition: 'background-image 0.5s',
           }}
           onMouseLeave={(e) =>
-            handleBackgroundImage(e.currentTarget, movies[movies.length - 1])
+            handleBackgroundImage(
+              e.currentTarget,
+              state.movies[state.movies.length - 1],
+            )
           }
         >
-          {movies.map((movie: any, index: number) => (
+          {state.movies.map((movie: Movie, index: number) => (
             <div
               className="relative group w-52 h-54 mb-4 flex-shrink-0"
               key={index}
@@ -162,15 +186,17 @@ export function Trailers() {
               </div>
               <div className="absolute bottom-0 left-0 p-4 text-white">
                 <h3 className="text-lg font-bold">{movie.title}</h3>
-                {movie.trailers.map((trailer: any, trailerIndex: number) => (
-                  <p
-                    key={trailerIndex}
-                    className="text-sm cursor-pointer"
-                    onClick={() => handleModal(trailer.key)}
-                  >
-                    {trailer.name}
-                  </p>
-                ))}
+                {movie.trailers.map(
+                  (trailer: Trailer, trailerIndex: number) => (
+                    <p
+                      key={trailerIndex}
+                      className="text-sm cursor-pointer"
+                      onClick={() => handleModal(trailer.key)}
+                    >
+                      {trailer.name}
+                    </p>
+                  ),
+                )}
               </div>
             </div>
           ))}

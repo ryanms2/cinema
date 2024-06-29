@@ -12,7 +12,7 @@ import {
 } from '@/lib/data'
 import { Button } from '@/components/ui/button'
 import { Search } from './search'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { ListAll } from './listAll'
 import { SearchSkeleton } from '@/app/ui/skeletons'
@@ -35,6 +35,7 @@ export function ComponentPage({
   const [amountCollections, setAmountCollections] = useState<number>(0)
   const [amountPerson, setAmountPerson] = useState<number>(0)
   const [page, setPage] = useState<number>(1)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const query = searchParams?.query || ''
   const currentPage = Number(searchParams?.page) || 1
@@ -58,6 +59,7 @@ export function ComponentPage({
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       let total = await fetchAll(query)
 
       if (selectedItem) {
@@ -74,10 +76,10 @@ export function ComponentPage({
       setAmountSeries(series)
       setAmountCollections(collections)
       setAmountPerson(persons)
+      setLoading(false)
     }
     fetchData()
   }, [query, selectedItem, currentPage])
-  console.log(totalPages)
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -133,13 +135,15 @@ export function ComponentPage({
               </p>
             </div>
           </div>
-          <Suspense fallback={<SearchSkeleton />}>
+          {loading ? (
+            <SearchSkeleton />
+          ) : (
             <ListAll
               totalPages={totalPages}
               page={page}
               selectedItem={selectedItem}
             />
-          </Suspense>
+          )}
         </div>
       </div>
     </div>

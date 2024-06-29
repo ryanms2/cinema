@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Pagination } from './pagination'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export async function ListAll({
+export function ListAll({
   totalPages,
   page,
   selectedItem,
