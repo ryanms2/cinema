@@ -20,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <head>
+        <meta name="google-site-verification" content="EmwnJetFAd5wamDtxABFbVs3kuPxLHFOLD2WWIeO_dE" />
         <link
           rel="icon"
           href="https://img.icons8.com/?size=100&id=59842&format=png&color=000000"
